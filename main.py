@@ -5,10 +5,24 @@ import json
 
 """
 here, the file will get tested against all the regular expressions and findings will be outputted similar to js miner
-but we need a way to organize regex patterns into categories: example below
-    /secr(e|3)t=/ | CATEGORY secret/api key
-    /url=http:\/\/localhost | CATEGORY hidden url endpoint
 """
+
+
+
+def compile_pattern(pattern, regex_properties):
+        flags = 0
+        valid_pattern = pattern
+        if regex_properties["match_line"] == True:
+            valid_pattern = f"{valid_pattern}.*(?:\n|$)"
+            #flags |= re.DOTALL
+        if regex_properties["case_insensitive"] == True:
+            flags |= re.IGNORECASE #flags.append(re.IGNORECASE)
+
+        try:
+            return re.compile(valid_pattern, flags)
+        except re.error:
+            raise ValueError('Invalid Regular Expression: "{}"'.format(pattern))
+            
 
 def parse_js():
     # grab our js file
@@ -21,21 +35,14 @@ def parse_js():
         #print(categories)
 
     for pattern, regex_properties in categories.items():
-        # run regex through transformations based on JSON file properties
-        flags = 0
-        if regex_properties["match_line"] == True:
-            pattern = f"{pattern}.*(?:\n|$)"
-            #flags |= re.DOTALL
-        if regex_properties["case_sensitive"] == True:
-            flags |= re.IGNORECASE #flags.append(re.IGNORECASE)
-        pattern = re.compile(pattern, flags)
-
+        pattern = compile_pattern(pattern, regex_properties)
 
         matches = re.findall(pattern, js_code)
         if matches:
             for match in matches:
-                print(f'Category {regex_properties["type"]}\nString: {match[:150]}') # limiting this to 150 characters because if the code is obfuscated it will print a giant ass unreadable block
-                print("\n\n") # just for extra space, so i can read easier while debugging
+                if len(match) > 1000:
+                    match = match[:250] # prevents humungous blocks of minified code from being outputted
+                print(f'Category: {regex_properties["type"]}\nString: {match}')
         
 def main():
     parse_js()

@@ -1,19 +1,19 @@
 {
-    "url=regex": {
+    "url=": {
         "type": "Endpoint",
-        "case_sensitive": true,
+        "case_insensitive": true,
         "confidence": "high",
-        "match_line": false
+        "match_line": true
     },
     "password=": {
         "type": "credentials",
-        "case_sensitive": true,
+        "case_insensitive": true,
         "confidence": "low",
-        "match_line": true
+        "match_line": false
     },
     "data-target": {
         "type": "test",
-        "case_sensitive": false,
+        "case_insensitive": false,
         "confidence": "high",
         "match_line": true
     }
