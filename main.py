@@ -2,4 +2,9 @@
 import sys
 
 with open(sys.argv[1], "r") as target_file:
-    print(target_file.read())
+    js_code = target_file.read()
+
+with open("regex.txt", "r") as regular_expression_list:
+    regular_expressions = regular_expression_list.readlines()
+
+print(len(regular_expressions))
