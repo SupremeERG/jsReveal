@@ -1,8 +1,20 @@
-{["url" 
-    {
-    "http:\/\/localhost",
-    "[\"\'](?:/api/|api/)\S+[\"\']"
-
+{
+    "url=regex": {
+        "type": "Endpoint",
+        "case_sensitive": true,
+        "confidence": "high",
+        "match_line": false
+    },
+    "password=": {
+        "type": "credentials",
+        "case_sensitive": true,
+        "confidence": "low",
+        "match_line": true
+    },
+    "data-target": {
+        "type": "test",
+        "case_sensitive": false,
+        "confidence": "high",
+        "match_line": true
     }
-]
 }
