@@ -3,10 +3,6 @@ import sys
 import re
 import json
 
-"""
-here, the file will get tested against all the regular expressions and findings will be outputted similar to js miner
-"""
-
 
 
 def compile_pattern(pattern, regex_properties):
