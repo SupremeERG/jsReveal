@@ -3,6 +3,17 @@ import sys
 import re
 import json
 
+"""
+import argparse
+I want to implement functionality for testing multiple files at once, but python will be kinda
+slow (ik this because I have another tool that is kinda similar to this one -- it gets slower as you add more patterns and larger files to test)
+which is why I was thinking we switch to golang before we get too deep in
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--folder", "-f", help="use a folder of js files instead of just one file")
+
+parser.parse_args()
+"""
 
 
 def compile_pattern(pattern, regex_properties):
