@@ -13,8 +13,8 @@
     },
     "data-target": {
         "type": "test",
-        "case_insensitive": false,
+        "case_insensitive": true,
         "confidence": "high",
-        "match_line": false
+        "match_line": true
     }
 }
