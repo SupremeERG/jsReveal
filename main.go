@@ -6,9 +6,10 @@ import (
 	"io/fs"
 	"log"
 	"os"
+	"regexp"
 	"strings"
 
-	"github.com/SupremeERG/golang-pkg-pcre/src/pkg/pcre"
+	"github.com/flier/gohs/hyperscan"
 )
 
 type RegexProperties struct {
@@ -17,18 +18,19 @@ type RegexProperties struct {
 	Type            string `json:"type"`
 }
 
-func compilePattern(pattern string, regexProperties RegexProperties) (pcre.Regexp, *pcre.CompileError) {
-	var flags int
+func compilePattern(pattern string, regexProperties RegexProperties) (*regexp.Regexp, error) {
+	fmt.Println(hyperscan.Version())
+	//var flags int
 	validPattern := pattern
 	if regexProperties.MatchLine {
 		validPattern = fmt.Sprintf("%s.*(?:\n|$)", validPattern)
 	}
 	if regexProperties.CaseInsensitive {
 		//validPattern = fmt.Sprintf("%s", validPattern)
-		flags |= pcre.CASELESS
+		//flags |= pcre.CASELESS
 	}
 
-	return pcre.Compile(validPattern, flags)
+	return regexp.Compile(validPattern) //pcre.Compile(validPattern, flags)
 }
 
 func fetchPatterns() []byte {
@@ -63,21 +65,20 @@ func parseJS() {
 	for pattern, regexProperties := range categories {
 		regexpPattern, err := compilePattern(pattern, regexProperties)
 		if err != nil {
-			log.Fatal(fmt.Sprintf("Error compiling regular expression '%s': ", pattern), strings.ReplaceAll(err.Message, "\n", "\\n"))
+			log.Fatal(fmt.Sprintf("Error compiling regular expression '%s': ", pattern), strings.ReplaceAll(err.Error(), "\n", "\\n"))
 			return
 		}
 
-		matches := regexpPattern.MatcherString(string(jsCode), 0)
-		fmt.Println(matches.GroupString(0)) // im having issues with this regex package, the defualt one has limited options so i am trying a custom pkg with no documentation that uses perl syntax
-		/*
-			if matches != nil {
-				for _, match := range matches {
-					if len(match) > 1000 {
-						match = match[:250] + "\n" // Prevents humungous blocks of minified code from being outputted
-					}
-					fmt.Printf("Category: %s\nString: %s\n", regexProperties.Type, match)
+		matches := regexpPattern.FindAllString(string(jsCode), -1)
+
+		if matches != nil {
+			for _, match := range matches {
+				if len(match) > 1000 {
+					match = match[:250] + "\n" // Prevents humungous blocks of minified code from being outputted
 				}
-			}*/
+				fmt.Printf("Category: %s\nString: %s\n", regexProperties.Type, match)
+			}
+		}
 	}
 }
 

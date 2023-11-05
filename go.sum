@@ -1,2 +1,4 @@
 github.com/SupremeERG/golang-pkg-pcre v0.0.0-20231105043426-0a8bcd979a7f h1:h0XL00Xa3Egpbf9qfQKSk/bbxbz3nvhReLsC/WYwYCM=
 github.com/SupremeERG/golang-pkg-pcre v0.0.0-20231105043426-0a8bcd979a7f/go.mod h1:kvw0pummGweF86zyVgeWKaw3q+aufiA+Aj8LKNc3w7A=
+github.com/flier/gohs v1.2.2 h1:v1Pmzvv/PgYoJhmOHadKjKr0wpudb20WcF1ZF0miiM8=
+github.com/flier/gohs v1.2.2/go.mod h1:YZaZuBeDNoFW94B4j+YFo7Lv3XlkwNm9vsOvk0E3kgY=
