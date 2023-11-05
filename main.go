@@ -6,10 +6,9 @@ import (
 	"io/fs"
 	"log"
 	"os"
-	"regexp"
 	"strings"
 
-	"github.com/flier/gohs/hyperscan"
+	"github.com/dlclark/regexp2"
 )
 
 type RegexProperties struct {
@@ -18,19 +17,18 @@ type RegexProperties struct {
 	Type            string `json:"type"`
 }
 
-func compilePattern(pattern string, regexProperties RegexProperties) (*regexp.Regexp, error) {
-	fmt.Println(hyperscan.Version())
-	//var flags int
+func compilePattern(pattern string, regexProperties RegexProperties) (*regexp2.Regexp, error) {
+	var flags regexp2.RegexOptions
 	validPattern := pattern
 	if regexProperties.MatchLine {
 		validPattern = fmt.Sprintf("%s.*(?:\n|$)", validPattern)
 	}
 	if regexProperties.CaseInsensitive {
 		//validPattern = fmt.Sprintf("%s", validPattern)
-		//flags |= pcre.CASELESS
+		flags |= regexp2.IgnoreCase
 	}
 
-	return regexp.Compile(validPattern) //pcre.Compile(validPattern, flags)
+	return regexp2.Compile(validPattern, flags)
 }
 
 func fetchPatterns() []byte {
@@ -45,7 +43,10 @@ func fetchPatterns() []byte {
 
 func parseJS() {
 	// Grab the JS file
-	jsCode, err := fs.ReadFile(os.DirFS("."), os.Args[1])
+	var matchTest *regexp2.Match
+	var matches = []string{}
+
+	jsCode, err := os.ReadFile(os.Args[1])
 	if err != nil {
 		fmt.Println("Error reading JS file:", err)
 		return
@@ -66,20 +67,21 @@ func parseJS() {
 		regexpPattern, err := compilePattern(pattern, regexProperties)
 		if err != nil {
 			log.Fatal(fmt.Sprintf("Error compiling regular expression '%s': ", pattern), strings.ReplaceAll(err.Error(), "\n", "\\n"))
-			return
 		}
+		matchTest, _ = regexpPattern.FindStringMatch(string(jsCode))
 
-		matches := regexpPattern.FindAllString(string(jsCode), -1)
-
-		if matches != nil {
-			for _, match := range matches {
-				if len(match) > 1000 {
-					match = match[:250] + "\n" // Prevents humungous blocks of minified code from being outputted
-				}
-				fmt.Printf("Category: %s\nString: %s\n", regexProperties.Type, match)
+		for matchTest != nil {
+			matches = append(matches, matchTest.String())
+			match := matchTest.String()
+			if len(match) > 1000 {
+				match = match[:250] + "\n" // Prevents humungous blocks of minified code from being outputted
 			}
+			fmt.Printf("Category: %s\nString: %s\n\n", regexProperties.Type, match) ///
+			matchTest, err = regexpPattern.FindNextMatch(matchTest)
 		}
+
 	}
+
 }
 
 func main() {
