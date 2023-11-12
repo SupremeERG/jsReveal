@@ -21,16 +21,16 @@ type RegexProperties struct {
 }
 
 func compilePattern(pattern string, regexProperties RegexProperties) (*regexp2.Regexp, error) {
-	var flags regexp2.RegexOptions
+	var regexOptions regexp2.RegexOptions
 	validPattern := pattern
 	if regexProperties.MatchLine {
 		validPattern = fmt.Sprintf("%s.*(?:\n|$)", validPattern)
 	}
 	if regexProperties.CaseInsensitive {
-		flags |= regexp2.IgnoreCase
+		regexOptions |= regexp2.IgnoreCase
 	}
 
-	return regexp2.Compile(validPattern, flags)
+	return regexp2.Compile(validPattern, regexOptions)
 }
 
 func fetchPatterns() ([]string, error) {
@@ -49,11 +49,11 @@ func fetchPatterns() ([]string, error) {
 	return patterns, scanner.Err()
 }
 
-func parseJS(jsFilePath string) {
+func parseJS() {
 	var matchTest *regexp2.Match
 	var matches = []string{}
 
-	jsCode, err := os.ReadFile(jsFilePath)
+	jsCode, err := os.ReadFile(os.Args[1])
 	if err != nil {
 		fmt.Println("Error reading JS file:", err)
 		return
@@ -192,8 +192,5 @@ func main() {
 		return
 	}
 
-	if *verbose {
-		log.Println("Verbose mode enabled")
-	}
-	parseJS(*jsFilePath)
+	parseJS()
 }
