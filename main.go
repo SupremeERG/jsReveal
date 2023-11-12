@@ -34,7 +34,7 @@ func main() {
 
 	cleanPattern, _ := regexp.Compile(".*/") // Used to make links more readable
 	switch options.Source {
-	default:
+	default: // no option selected
 		fmt.Println("./jsReveal -u <url to JS file>")
 	case 1: // single file
 		parser.ParseJS(options.JSFilePath)
@@ -54,6 +54,7 @@ func main() {
 			go fetchcode.FetchJSFromURL(link, ch)
 
 			go parser.ParseJSFromCode(<-ch, link) // Assuming parseJSFromCode accepts a string of JS code
+
 		}
 
 	case 3: // single url

@@ -11,17 +11,24 @@ import (
 // Function to fetch JS code from a URL
 func FetchJSFromURL(url string, channel chan string) { //(string, error) {
 	resp, err := http.Get(url)
+
+	if resp.StatusCode == 404 {
+		log.Println("Error fetching JS from URL: ", "404 File not Found")
+	}
+
 	if err != nil {
-		log.Println(err)
+		log.Fatal("Error fetching JS from URL: ", err)
 	}
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
+
 	if err != nil {
-		log.Println(err)
+		log.Fatal("Error reading JS: ", err)
 	}
 
-	channel <- string(body) //return string(body), nil
+	channel <- string(body) // string(body) is the JS code
+
 }
 
 func FetchPatterns() ([]string, error) {
