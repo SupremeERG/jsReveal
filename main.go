@@ -10,6 +10,7 @@ import (
 	"os"
 
 	// "strings"
+	"github.com/SupremeERG/jsReveal/pkg/regex"
 
 	"github.com/dlclark/regexp2"
 )
@@ -154,6 +155,7 @@ func fetchJSFromURL(url string) (string, error) {
 func main() {
 	jsFilePath := flag.String("f", "", "Path to the .js file")
 	jsLinksPath := flag.String("l", "", "Path to the file with JS links")
+	jsURL := flag.String("u", "", "URL to a JS file")
 	verbose := flag.Bool("v", false, "Enable verbose output")
 	flag.Parse()
 
@@ -185,6 +187,13 @@ func main() {
 			parseJSFromCode(jsCode) // Assuming parseJSFromCode accepts a string of JS code
 		}
 		return
+	} else if *jsURL != "" {
+		jsCode, err := fetchJSFromURL(*jsURL)
+		if err != nil {
+			log.Printf("Error fetching JS from URL %s: %v\n", *jsURL, err)
+		}
+		parseJSFromCode(jsCode)
+		return
 	}
 
 	if *jsFilePath == "" {
@@ -192,8 +201,10 @@ func main() {
 		return
 	}
 
-	if *verbose {
-		log.Println("Verbose mode enabled")
-	}
+	/*
+		if *verbose {
+			log.Println("Verbose mode enabled")
+		}*/ // little unnecessary if they added the option
+
 	parseJS(*jsFilePath)
 }
