@@ -1,12 +1,12 @@
 package main
 
 import (
-	"encoding/json"
+	"bufio"
 	"fmt"
-	"io/fs"
 	"log"
 	"os"
-	"strings"
+
+	// "strings"
 
 	"github.com/dlclark/regexp2"
 )
@@ -24,25 +24,29 @@ func compilePattern(pattern string, regexProperties RegexProperties) (*regexp2.R
 		validPattern = fmt.Sprintf("%s.*(?:\n|$)", validPattern)
 	}
 	if regexProperties.CaseInsensitive {
-		//validPattern = fmt.Sprintf("%s", validPattern)
 		flags |= regexp2.IgnoreCase
 	}
 
 	return regexp2.Compile(validPattern, flags)
 }
 
-func fetchPatterns() []byte {
-	regexJSON, err := fs.ReadFile(os.DirFS("."), "regex.json")
+func fetchPatterns() ([]string, error) {
+	file, err := os.Open("regex.txt") // Replace with your file path
 	if err != nil {
-		log.Fatal("Error reading regex file: ", err)
-		//fmt.Println("Error reading regex file:", err)
+		return nil, err
+	}
+	defer file.Close()
+
+	var patterns []string
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		patterns = append(patterns, scanner.Text())
 	}
 
-	return regexJSON
+	return patterns, scanner.Err()
 }
 
 func parseJS() {
-	// Grab the JS file
 	var matchTest *regexp2.Match
 	var matches = []string{}
 
@@ -52,21 +56,18 @@ func parseJS() {
 		return
 	}
 
-	// Grab the regex patterns from JSON
-	regexJSON := fetchPatterns()
-
-	var categories map[string]RegexProperties
-	err = json.Unmarshal(regexJSON, &categories)
+	// Grab the regex patterns from the file
+	patterns, err := fetchPatterns()
 	if err != nil {
-		fmt.Println("Error parsing regex JSON:", err)
-		return
+		log.Fatal("Error reading regex patterns: ", err)
 	}
 
-	// start testing the file(s) for appealing code
-	for pattern, regexProperties := range categories {
+	regexProperties := RegexProperties{MatchLine: false, CaseInsensitive: true} // Example properties
+
+	for _, pattern := range patterns {
 		regexpPattern, err := compilePattern(pattern, regexProperties)
 		if err != nil {
-			log.Fatal(fmt.Sprintf("Error compiling regular expression '%s': ", pattern), strings.ReplaceAll(err.Error(), "\n", "\\n"))
+			log.Fatal("Error compiling regular expression '", pattern, "': ", err)
 		}
 		matchTest, _ = regexpPattern.FindStringMatch(string(jsCode))
 
@@ -74,14 +75,12 @@ func parseJS() {
 			matches = append(matches, matchTest.String())
 			match := matchTest.String()
 			if len(match) > 1000 {
-				match = match[:250] + "\n" // Prevents humungous blocks of minified code from being outputted
+				match = match[:250] + "\n" // Prevents large blocks of code
 			}
-			fmt.Printf("Category: %s\nString: %s\n\n", regexProperties.Type, match) ///
-			matchTest, err = regexpPattern.FindNextMatch(matchTest)
+			fmt.Printf("Pattern: %s\nMatch: %s\n\n", pattern, match)
+			matchTest, _ = regexpPattern.FindNextMatch(matchTest)
 		}
-
 	}
-
 }
 
 func main() {
