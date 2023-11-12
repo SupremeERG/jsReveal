@@ -5,8 +5,11 @@ go 1.21.3
 require (
 	github.com/SupremeERG/jsReveal/pkg/fetchcode v0.0.0-00010101000000-000000000000
 	github.com/SupremeERG/jsReveal/pkg/parse v0.0.0-00010101000000-000000000000
-	github.com/SupremeERG/jsReveal/pkg/regexmod v0.0.0-00010101000000-000000000000
-	github.com/dlclark/regexp2 v1.10.0
+)
+
+require (
+	github.com/SupremeERG/jsReveal/pkg/regexmod v0.0.0-00010101000000-000000000000 // indirect
+	github.com/dlclark/regexp2 v1.10.0 // indirect
 )
 
 replace github.com/SupremeERG/jsReveal/pkg/regexmod => ./pkg/regexmod

@@ -48,7 +48,7 @@ func ParseJS(jsFilePath string) {
 }
 
 // parseJSFromCode parses JavaScript code from a string.
-func ParseJSFromCode(jsCode string) {
+func ParseJSFromCode(jsCode string, source string) {
 	var matchTest *regexp2.Match
 	var matches = []string{}
 
@@ -81,7 +81,7 @@ func ParseJSFromCode(jsCode string) {
 			if len(match) > 1000 {
 				match = match[:250] + "\n" // Prevents large blocks of code
 			}
-			fmt.Printf("Pattern: %s\nMatch: %s\n\n", pattern, match)
+			fmt.Printf("Pattern: %s\nMatch: %s\nSource: %s\n\n", pattern, match, source)
 			matchTest, _ = regexpPattern.FindNextMatch(matchTest)
 		}
 	}

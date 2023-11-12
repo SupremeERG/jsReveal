@@ -59,14 +59,14 @@ func main() {
 		for _, link := range links {
 			go fetchcode.FetchJSFromURL(link, ch)
 
-			go parse.ParseJSFromCode(<-ch) // Assuming parseJSFromCode accepts a string of JS code
+			go parse.ParseJSFromCode(<-ch, link) // Assuming parseJSFromCode accepts a string of JS code
 		}
 		return
 	} else if *jsURL != "" {
 		ch := make(chan string)
 		fetchcode.FetchJSFromURL(*jsURL, ch)
 
-		parse.ParseJSFromCode(<-ch)
+		parse.ParseJSFromCode(<-ch, *jsURL)
 		return
 	}
 
