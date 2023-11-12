@@ -10,8 +10,8 @@ import (
 	"os"
 
 	// "strings"
-	"github.com/SupremeERG/jsReveal/pkg/regex"
 
+	"github.com/SupremeERG/jsReveal/pkg/regexmod"
 	"github.com/dlclark/regexp2"
 )
 
@@ -21,6 +21,7 @@ type RegexProperties struct {
 	Type            string `json:"type"`
 }
 
+/*
 func compilePattern(pattern string, regexProperties RegexProperties) (*regexp2.Regexp, error) {
 	var flags regexp2.RegexOptions
 	validPattern := pattern
@@ -32,7 +33,7 @@ func compilePattern(pattern string, regexProperties RegexProperties) (*regexp2.R
 	}
 
 	return regexp2.Compile(validPattern, flags)
-}
+}*/
 
 func fetchPatterns() ([]string, error) {
 	file, err := os.Open("regex.txt") // Replace with your file path
@@ -69,7 +70,7 @@ func parseJS(jsFilePath string) {
 	regexProperties := RegexProperties{MatchLine: false, CaseInsensitive: true} // Example properties
 
 	for _, pattern := range patterns {
-		regexpPattern, err := compilePattern(pattern, regexProperties)
+		regexpPattern, err := regexmod.compilePattern(pattern, regexProperties)
 		if err != nil {
 			log.Fatal("Error compiling regular expression '", pattern, "': ", err)
 		}
