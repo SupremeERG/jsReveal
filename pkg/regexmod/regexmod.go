@@ -14,7 +14,7 @@ type RegexProperties struct {
 	Type            string `json:"type"`
 }
 
-func compilePattern(pattern string, regexProperties RegexProperties) (*regexp2.Regexp, error) {
+func CompilePattern(pattern string, regexProperties RegexProperties) (*regexp2.Regexp, error) {
 	var flags regexp2.RegexOptions
 	validPattern := pattern
 	if regexProperties.MatchLine {
