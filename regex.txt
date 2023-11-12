@@ -1,0 +1,18 @@
+fetch\(['"`](https?:\/\/[\w\d./?=#]+)['"`]\)
+axios\.(get|post|put|delete)\(['"`](https?:\/\/[\w\d./?=#]+)['"`]\)
+jQuery\.(get|post)\(['"`](https?:\/\/[\w\d./?=#]+)['"`]\)`
+XMLHttpRequest\(\).*\.open\(['"`]GET|POST['"`], ['"`](https?:\/\/[\w\d./?=#]+)['"`]\)
+new WebSocket\(['"`]wss?:\/\/[\w\d./?=#]+['"`]\)
+'[\w\d]{32,}'
+['"`]Bearer [\w\d-_.+]+['"`]
+['"`]api_key['"`]: ['"`]\w+['"`]
+['"`]/api/[\w\d/-]+['"`]
+['"`](GET|POST|PUT|DELETE) ['"`]/[\w\d/-]+['"`]
+graphql\(['"`]{[\w\d\s(),!:=<>/+'"`]+}['"`]\)
+process\.env\.[A-Z_]+_API_KEY
+process\.env\.[A-Z_]+_API_URL
+https?:\/\/api\.[\w\d.-]+\/[\w\d/-]*
+https?:\/\/[\w\d.-]+\.com\/api\/[\w\d/-]*
+['"`]client_id['"`]: ['"`]\w+['"`]
+['"`]client_secret['"`]: ['"`][\w\d-]+['"`]
+['"`]redirect_uri['"`]: ['"`]https?:\/\/[\w\d./?=#]+['"`]
