@@ -41,7 +41,7 @@ func ParseJS(jsFilePath string) {
 			if len(match) > 1000 {
 				match = match[:250] + "\n" // Prevents large blocks of code
 			}
-			fmt.Printf("Pattern: %s\nMatch: %s\n\n", pattern, match)
+			fmt.Printf("Match: %s\n\n", match) // removing the pattern from print, it is only needed to test
 			matchTest, _ = regexpPattern.FindNextMatch(matchTest)
 		}
 	}
@@ -81,7 +81,7 @@ func ParseJSFromCode(jsCode string, source string) {
 			if len(match) > 1000 {
 				match = match[:250] + "\n" // Prevents large blocks of code
 			}
-			fmt.Printf("Pattern: %s\nMatch: %s\nSource: %s\n\n", pattern, match, source)
+			fmt.Printf("Match: %s\nSource: %s\n\n", match, source) // removing the pattern from print, it is only needed to test
 			matchTest, _ = regexpPattern.FindNextMatch(matchTest)
 		}
 	}
