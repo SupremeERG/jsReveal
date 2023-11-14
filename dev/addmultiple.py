@@ -23,7 +23,7 @@ with open(regexFile) as regexfileobject: # get the json object
 
 for newRegex in regexes:
     regexObj.update({
-        newRegex: {
+        newRegex[:-1]: {
             "type": "AddedFromAdd.py",
             "case_insensitive": False,
             "confidence": "low",
