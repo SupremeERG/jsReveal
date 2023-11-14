@@ -1,7 +1,3 @@
-fetch\(['"`](https?:\/\/[\w\d./?=#]+)['"`]\)
-axios\.(get|post|put|delete)\(['"`](https?:\/\/[\w\d./?=#]+)['"`]\)
-jQuery\.(get|post)\(['"`](https?:\/\/[\w\d./?=#]+)['"`]\)`
-XMLHttpRequest\(\).*\.open\(['"`]GET|POST['"`], ['"`](https?:\/\/[\w\d./?=#]+)['"`]\)
 new WebSocket\(['"`]wss?:\/\/[\w\d./?=#]+['"`]\)
 '[\w\d]{32,}'
 ['"`]Bearer [\w\d-_.+]+['"`]
@@ -15,4 +11,60 @@ https?:\/\/api\.[\w\d.-]+\/[\w\d/-]*
 https?:\/\/[\w\d.-]+\.com\/api\/[\w\d/-]*
 ['"`]client_id['"`]: ['"`]\w+['"`]
 ['"`]client_secret['"`]: ['"`][\w\d-]+['"`]
-['"`]redirect_uri['"`]: ['"`]https?:\/\/[\w\d./?=#]+['"`]
+https?:\/\/[\w\d.-]+\/api\/[\w\d/-]*
+["']\/api\/[\w\d/-]+["']
+\bAPI_ENDPOINT['"]?\s*:\s*['"]https?://[\w\d.-]+\/[\w\d/-]+
+["']\/[\w\d/-]+\/api\/[\w\d/-]+["']
+["']https?://api\.[\w\d.-]+\/[\w\d/-]+["']
+["']/api/v[\d]+/[\w\d/-]+["']
+WebSocket\(['"]wss?://[\w\d.-]+/[\w\d/-]+["']\)
+__NEXT_DATA__\s*=\s*{.*apiPath: ['"]\/[\w\d/-]+["']
+XMLHttpRequest\(\).open\("GET", ['"]\/[\w\d/-]+["']\)
+XMLHttpRequest\(\).open\("POST", ['"]\/[\w\d/-]+["']\)
+this\.callApi\(['"]\/[\w\d/-]+["']\)
+this\.apiRequest\(['"]\/[\w\d/-]+["']\)
+this\.sendApiRequest\(['"]\/[\w\d/-]+["']\)
+this\.invokeApi\(['"]\/[\w\d/-]+["']\)
+this\.requestApi\(['"]\/[\w\d/-]+["']\)
+this\.apiCall\(['"]\/[\w\d/-]+["']\)
+this\.fetchFromApi\(['"]\/[\w\d/-]+["']\)
+this\.queryApi\(['"]\/[\w\d/-]+["']\)
+database\(['"]\/[\w\d/-]+["']\)\.query
+api\.request\(['"]\/[\w\d/-]+["']\)
+graphql\(['"]\{[\s\S]*?['"]\)
+fetch\(['"]\/graphql['"], \{[\s\S]*?"query": "{[\s\S]*?}"\}
+axios\.post\(['"]\/graphql['"], \{[\s\S]*?"query": "{[\s\S]*?}"\}
+gql\[\s\S]*?``
+new ApolloClient\({[\s\S]*?uri: ['"]\/graphql['"]\}
+['"]\{[\s\S]*?__typename[\s\S]*?['"]
+graphql\.express\(['"]\/[\w\d/-]+['"]\)
+expressGraphQL\({[\s\S]*?schema: [\s\S]*?\}
+GraphQLServer\({[\s\S]*?schema: [\s\S]*?\}
+GraphQLObjectType\({[\s\S]*?name: ['"][\w\d/-]+['"]\}
+graphqlHTTP\({[\s\S]*?schema: [\s\S]*?\}
+graphql\.sync\(['"]\{[\s\S]*?['"]\)
+graphene\.ObjectType\(['"]\{[\s\S]*?['"]\)
+graphql\.buildSchema\(['"]\{[\s\S]*?['"]\)
+apolloServer\.applyMiddleware\({[\s\S]*?path: ['"]\/graphql['"]\}
+graphql\.resolve\(['"]\{[\s\S]*?['"]\)
+relay\.graphql\(['"]\{[\s\S]*?['"]\)
+fetch\(['"]https:\/\/myapi\.com\/[\w\d/-]+["']\)
+axios\.get\(['"]https:\/\/api\.[\w\d.-]+\/v2\/[\w\d/-]+["']\)
+d3\.json\(['"]https:\/\/data\.[\w\d.-]+\/[\w\d/-]+\.json["']\)
+jQuery\.ajax\({\s*url:\s*['"]https:\/\/[\w\d.-]+\/api\/[\w\d/-]+["']\}
+ApolloClient\({\s*uri:\s*['"]wss:\/\/graphql\.[\w\d.-]+['"]\}
+new WebSocket\(['"]wss:\/\/[\w\d.-]+\/subscriptions['"]\)
+fetch\(['"]\/api\/v1\/[\w\d/-]+['"],\s*\{ method:\s*['"]POST['"]\}\)
+fetch\(['"]\/[\w\d/-]+\/api\/[\w\d/-]+['"],\s*\{ headers:\s*\{['"]Authorization['"]:\s*['"]Bearer\s[\w\d/-]+['"]\}\}\)
+axios\.post\(['"]https:\/\/[\w\d.-]+\/api\/[\w\d/-]+['"],\s*formData\)
+apolloClient\.query\({ query:\s*gql['"]{[\s\S]*?}['"] }\)
+new ApolloClient\({ uri:\s*['"]https:\/\/[\w\d.-]+\/graphql['"] }\)
+graphql\.request\(['"]https:\/\/[\w\d.-]+\/graphql['"],\s*['"]\{[\s\S]*?\}['"]\)
+axios\.create\({ baseURL:\s*['"]https:\/\/api\.[\w\d.-]+['"] }\)
+fetch\(['"]https:\/\/[\w\d.-]+\/api\/auth['"],\s*\{ method:\s*['"]POST['"],\s*credentials:\s*['"]include['"] \}\)
+axios\.create\({ baseURL:\s*['"]https:\/\/[\w\d.-]+\/api['"],\s*withCredentials:\s*true \}\)
+new XMLHttpRequest\(\).open\(['"]GET['"],\s*['"]https:\/\/[\w\d.-]+\/api\/data['"],\s*true\)
+fetch\(['"]https:\/\/[\w\d.-]+\/api\/data['"],\s*\{ headers:\s*\{['"]Content-Type['"]:\s*['"]application\/json['"]\}\}\)
+graphql\([^)]+\)
+new GraphQLClient\([^)]+\)
+graphqlRequestClient\.request\([^)]+\)
