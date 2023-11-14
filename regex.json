@@ -1,5 +1,4 @@
 {
-    
     "data-target": {
         "type": "test",
         "case_insensitive": true,
@@ -109,6 +108,348 @@
         "match_line": false
     },
     "['\"`]redirect_uri['\"`]: ['\"`]https?:\\/\\/[\\w\\d./?=#]+['\"`]\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "https?:\\/\\/[\\w\\d.-]+\\/api\\/[\\w\\d/-]*\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "[\"']\\/api\\/[\\w\\d/-]+[\"']\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "\\bAPI_ENDPOINT['\"]?\\s*:\\s*['\"]https?://[\\w\\d.-]+\\/[\\w\\d/-]+\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "[\"']\\/[\\w\\d/-]+\\/api\\/[\\w\\d/-]+[\"']\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "[\"']https?://api\\.[\\w\\d.-]+\\/[\\w\\d/-]+[\"']\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "[\"']/api/v[\\d]+/[\\w\\d/-]+[\"']\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "WebSocket\\(['\"]wss?://[\\w\\d.-]+/[\\w\\d/-]+[\"']\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "__NEXT_DATA__\\s*=\\s*{.*apiPath: ['\"]\\/[\\w\\d/-]+[\"']\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "XMLHttpRequest\\(\\).open\\(\"GET\", ['\"]\\/[\\w\\d/-]+[\"']\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "XMLHttpRequest\\(\\).open\\(\"POST\", ['\"]\\/[\\w\\d/-]+[\"']\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "this\\.callApi\\(['\"]\\/[\\w\\d/-]+[\"']\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "this\\.apiRequest\\(['\"]\\/[\\w\\d/-]+[\"']\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "this\\.sendApiRequest\\(['\"]\\/[\\w\\d/-]+[\"']\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "this\\.invokeApi\\(['\"]\\/[\\w\\d/-]+[\"']\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "this\\.requestApi\\(['\"]\\/[\\w\\d/-]+[\"']\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "this\\.apiCall\\(['\"]\\/[\\w\\d/-]+[\"']\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "this\\.fetchFromApi\\(['\"]\\/[\\w\\d/-]+[\"']\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "this\\.queryApi\\(['\"]\\/[\\w\\d/-]+[\"']\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "database\\(['\"]\\/[\\w\\d/-]+[\"']\\)\\.query\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "api\\.request\\(['\"]\\/[\\w\\d/-]+[\"']\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "graphql\\(['\"]\\{[\\s\\S]*?['\"]\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "fetch\\(['\"]\\/graphql['\"], \\{[\\s\\S]*?\"query\": \"{[\\s\\S]*?}\"\\}\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "axios\\.post\\(['\"]\\/graphql['\"], \\{[\\s\\S]*?\"query\": \"{[\\s\\S]*?}\"\\}\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "gql\\[\\s\\S]*?``\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "new ApolloClient\\({[\\s\\S]*?uri: ['\"]\\/graphql['\"]\\}\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "['\"]\\{[\\s\\S]*?__typename[\\s\\S]*?['\"]\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "graphql\\.express\\(['\"]\\/[\\w\\d/-]+['\"]\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "expressGraphQL\\({[\\s\\S]*?schema: [\\s\\S]*?\\}\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "GraphQLServer\\({[\\s\\S]*?schema: [\\s\\S]*?\\}\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "GraphQLObjectType\\({[\\s\\S]*?name: ['\"][\\w\\d/-]+['\"]\\}\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "graphqlHTTP\\({[\\s\\S]*?schema: [\\s\\S]*?\\}\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "graphql\\.sync\\(['\"]\\{[\\s\\S]*?['\"]\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "graphene\\.ObjectType\\(['\"]\\{[\\s\\S]*?['\"]\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "graphql\\.buildSchema\\(['\"]\\{[\\s\\S]*?['\"]\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "apolloServer\\.applyMiddleware\\({[\\s\\S]*?path: ['\"]\\/graphql['\"]\\}\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "graphql\\.resolve\\(['\"]\\{[\\s\\S]*?['\"]\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "relay\\.graphql\\(['\"]\\{[\\s\\S]*?['\"]\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "fetch\\(['\"]https:\\/\\/myapi\\.com\\/[\\w\\d/-]+[\"']\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "axios\\.get\\(['\"]https:\\/\\/api\\.[\\w\\d.-]+\\/v2\\/[\\w\\d/-]+[\"']\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "d3\\.json\\(['\"]https:\\/\\/data\\.[\\w\\d.-]+\\/[\\w\\d/-]+\\.json[\"']\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "jQuery\\.ajax\\({\\s*url:\\s*['\"]https:\\/\\/[\\w\\d.-]+\\/api\\/[\\w\\d/-]+[\"']\\}\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "ApolloClient\\({\\s*uri:\\s*['\"]wss:\\/\\/graphql\\.[\\w\\d.-]+['\"]\\}\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "new WebSocket\\(['\"]wss:\\/\\/[\\w\\d.-]+\\/subscriptions['\"]\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "fetch\\(['\"]\\/api\\/v1\\/[\\w\\d/-]+['\"],\\s*\\{ method:\\s*['\"]POST['\"]\\}\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "fetch\\(['\"]\\/[\\w\\d/-]+\\/api\\/[\\w\\d/-]+['\"],\\s*\\{ headers:\\s*\\{['\"]Authorization['\"]:\\s*['\"]Bearer\\s[\\w\\d/-]+['\"]\\}\\}\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "axios\\.post\\(['\"]https:\\/\\/[\\w\\d.-]+\\/api\\/[\\w\\d/-]+['\"],\\s*formData\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "apolloClient\\.query\\({ query:\\s*gql['\"]{[\\s\\S]*?}['\"] }\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "new ApolloClient\\({ uri:\\s*['\"]https:\\/\\/[\\w\\d.-]+\\/graphql['\"] }\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "graphql\\.request\\(['\"]https:\\/\\/[\\w\\d.-]+\\/graphql['\"],\\s*['\"]\\{[\\s\\S]*?\\}['\"]\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "axios\\.create\\({ baseURL:\\s*['\"]https:\\/\\/api\\.[\\w\\d.-]+['\"] }\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "fetch\\(['\"]https:\\/\\/[\\w\\d.-]+\\/api\\/auth['\"],\\s*\\{ method:\\s*['\"]POST['\"],\\s*credentials:\\s*['\"]include['\"] \\}\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "axios\\.create\\({ baseURL:\\s*['\"]https:\\/\\/[\\w\\d.-]+\\/api['\"],\\s*withCredentials:\\s*true \\}\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "new XMLHttpRequest\\(\\).open\\(['\"]GET['\"],\\s*['\"]https:\\/\\/[\\w\\d.-]+\\/api\\/data['\"],\\s*true\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "fetch\\(['\"]https:\\/\\/[\\w\\d.-]+\\/api\\/data['\"],\\s*\\{ headers:\\s*\\{['\"]Content-Type['\"]:\\s*['\"]application\\/json['\"]\\}\\}\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "graphql\\([^)]+\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "new GraphQLClient\\([^)]+\\)\n": {
+        "type": "AddedFromAdd.py",
+        "case_insensitive": false,
+        "confidence": "low",
+        "match_line": false
+    },
+    "graphqlRequestClient\\.request\\([^)]+\\)": {
         "type": "AddedFromAdd.py",
         "case_insensitive": false,
         "confidence": "low",
