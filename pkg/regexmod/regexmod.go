@@ -12,6 +12,7 @@ type RegexProperties struct {
 	MatchLine       bool   `json:"match_line"`
 	CaseInsensitive bool   `json:"case_insensitive"`
 	Type            string `json:"type"`
+	Confidence      string `json:"confidence"`
 }
 
 func CompilePattern(pattern string, regexProperties RegexProperties) (*regexp2.Regexp, error) {

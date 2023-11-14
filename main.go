@@ -37,7 +37,7 @@ func main() {
 	default: // no option selected
 		fmt.Println("./jsReveal -u <url to JS file>")
 	case 1: // single file
-		parser.ParseJS(options.JSFilePath)
+		parser.ParseJS(options.JSFilePath, options.Verbose)
 
 	case 2: // multiple URLs
 		if options.Verbose {
@@ -53,7 +53,7 @@ func main() {
 		for _, link := range links {
 			go fetchcode.FetchJSFromURL(link, ch)
 
-			go parser.ParseJSFromCode(<-ch, link) // Assuming parseJSFromCode accepts a string of JS code
+			go parser.ParseJSFromCode(<-ch, link, options.Verbose) // Assuming parseJSFromCode accepts a string of JS code
 
 		}
 
@@ -64,6 +64,6 @@ func main() {
 		ch := make(chan string)
 		fetchcode.FetchJSFromURL(options.JSURL, ch)
 
-		parser.ParseJSFromCode(<-ch, options.JSURL)
+		parser.ParseJSFromCode(<-ch, options.JSURL, options.Verbose)
 	}
 }

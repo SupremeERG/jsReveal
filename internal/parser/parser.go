@@ -10,7 +10,8 @@ import (
 	"github.com/dlclark/regexp2"
 )
 
-func ParseJS(jsFilePath string) {
+func ParseJS(jsFilePath string, verbosity bool) {
+
 	var matchTest *regexp2.Match
 	var matches = []string{}
 
@@ -26,7 +27,7 @@ func ParseJS(jsFilePath string) {
 		log.Fatal("Error reading regex patterns: ", err)
 	}
 
-	regexProperties := regexmod.RegexProperties{MatchLine: false, CaseInsensitive: true} // Example properties
+	regexProperties := regexmod.RegexProperties{MatchLine: false, CaseInsensitive: true, Confidence: "high"} // Example properties
 
 	for _, pattern := range patterns {
 		regexpPattern, err := regexmod.CompilePattern(pattern, regexProperties)
@@ -41,14 +42,20 @@ func ParseJS(jsFilePath string) {
 			if len(match) > 1000 {
 				match = match[:250] + "\n" // Prevents large blocks of code
 			}
-			fmt.Printf("Match: %s\n\n", match) // removing the pattern from print, it is only needed to test
+
+			if verbosity == true {
+				fmt.Printf("Category: %s\nMatch: %s\nConfidence: %s\n", regexProperties.Type, match, regexProperties.Confidence)
+			} else {
+				fmt.Print(match, "\n\n") // removing the pattern from print, it is only needed to test
+			}
 			matchTest, _ = regexpPattern.FindNextMatch(matchTest)
 		}
 	}
+
 }
 
 // parseJSFromCode parses JavaScript code from a string.
-func ParseJSFromCode(jsCode string, source string) {
+func ParseJSFromCode(jsCode string, source string, verbosity bool) {
 	var matchTest *regexp2.Match
 	var matches = []string{}
 
@@ -58,17 +65,13 @@ func ParseJSFromCode(jsCode string, source string) {
 		log.Fatal("Error reading regex patterns: ", err)
 	}
 
-	regexProperties := regexmod.RegexProperties{MatchLine: false, CaseInsensitive: true} // Example properties
+	regexProperties := regexmod.RegexProperties{Type: "endpoint", MatchLine: false, CaseInsensitive: true, Confidence: "high"} // Example properties
 
+	/* to fetch from JSON file
+	categories, _ := fetchcode.FetchPatternsFromJSON()
+	for pattern, regexProperties := range categories { */
 	for _, pattern := range patterns {
-		/* JSON RARSE
-		regexJSON := fetchPatterns()
-		var categories map[string]RegexProperties
-		err = json.Unmarshal(regexJSON, &categories)
-		if err != nil {
-			fmt.Println("Error parsing regex JSON:", err)
-			return
-		}*/
+
 		regexpPattern, err := regexmod.CompilePattern(pattern, regexProperties)
 		if err != nil {
 			log.Fatal("Error compiling regular expression '", pattern, "': ", err)
@@ -81,7 +84,11 @@ func ParseJSFromCode(jsCode string, source string) {
 			if len(match) > 1000 {
 				match = match[:250] + "\n" // Prevents large blocks of code
 			}
-			fmt.Printf("Match: %s\nSource: %s\n\n", match, source) // removing the pattern from print, it is only needed to test
+			if verbosity == true {
+				fmt.Printf("Category: %s\nMatch: %s\nConfidence: %s\nSource: %s\n\n\n", regexProperties.Type, match, regexProperties.Confidence, source)
+			} else {
+				fmt.Printf("%s\t(%s)\n\n", match, source)
+			}
 			matchTest, _ = regexpPattern.FindNextMatch(matchTest)
 		}
 	}

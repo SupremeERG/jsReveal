@@ -2,10 +2,15 @@ package fetchcode
 
 import (
 	"bufio"
+	"encoding/json"
+	"fmt"
+	"io/fs"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/SupremeERG/jsReveal/pkg/regexmod"
 )
 
 // Function to fetch JS code from a URL
@@ -48,4 +53,21 @@ func FetchPatterns() ([]string, error) {
 
 	return patterns, scanner.Err()
 
+}
+
+func FetchPatternsFromJSON() (map[string]regexmod.RegexProperties, error) {
+	regexJSON, err := fs.ReadFile(os.DirFS("."), "regex.json")
+	if err != nil {
+		log.Fatal("Error reading regex file: ", err)
+		//fmt.Println("Error reading regex file:", err)
+	}
+
+	var categories map[string]regexmod.RegexProperties
+	err = json.Unmarshal(regexJSON, &categories)
+	if err != nil {
+		fmt.Println("Error parsing regex JSON:", err)
+		return nil, err
+	}
+
+	return categories, nil
 }
