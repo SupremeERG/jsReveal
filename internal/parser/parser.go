@@ -11,6 +11,7 @@ import (
 	"github.com/dlclark/regexp2"
 )
 
+// parseJS parses JavaScript code from a file
 func ParseJS(jsFilePath string, verbosity bool) {
 
 	var matchTest *regexp2.Match
@@ -51,7 +52,6 @@ func ParseJS(jsFilePath string, verbosity bool) {
 			matchTest, _ = regexpPattern.FindNextMatch(matchTest)
 		}
 	}
-
 }
 
 // parseJSFromCode parses JavaScript code from a string.

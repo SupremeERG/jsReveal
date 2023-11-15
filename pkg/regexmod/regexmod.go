@@ -6,8 +6,6 @@ import (
 	"github.com/dlclark/regexp2"
 )
 
-const Version = "v1.0.0"
-
 type RegexProperties struct {
 	MatchLine       bool   `json:"match_line"`
 	CaseInsensitive bool   `json:"case_insensitive"`
