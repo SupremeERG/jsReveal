@@ -29,7 +29,7 @@ func ParseJS(jsFilePath string, verbosity bool) {
 	}
 
 	for _, pattern := range patterns {
-		regexProperties := regexmod.DetermineProperties(pattern)
+		regexProperties := regexmod.DetermineProperties(pattern, "")
 		regexpPattern, err := regexmod.CompilePattern(pattern, regexProperties)
 		if err != nil {
 			log.Fatal("Error compiling regular expression '", pattern, "': ", err)
