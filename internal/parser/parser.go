@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/SupremeERG/jsReveal/pkg/fetchcode"
+	"github.com/SupremeERG/jsReveal/pkg/misc"
 	"github.com/SupremeERG/jsReveal/pkg/regexmod"
 	"github.com/dlclark/regexp2"
 )
@@ -27,16 +28,15 @@ func ParseJS(jsFilePath string, verbosity bool) {
 		log.Fatal("Error reading regex patterns: ", err)
 	}
 
-	regexProperties := regexmod.RegexProperties{MatchLine: false, CaseInsensitive: true, Confidence: "high"} // Example properties
-
 	for _, pattern := range patterns {
+		regexProperties := regexmod.DetermineProperties(pattern)
 		regexpPattern, err := regexmod.CompilePattern(pattern, regexProperties)
 		if err != nil {
 			log.Fatal("Error compiling regular expression '", pattern, "': ", err)
 		}
 		matchTest, _ = regexpPattern.FindStringMatch(string(jsCode))
 
-		for matchTest != nil {
+		for matchTest != nil && misc.Contains(matches, matchTest.String()) == false {
 			matches = append(matches, matchTest.String())
 			match := matchTest.String()
 			if len(match) > 1000 {
@@ -65,20 +65,19 @@ func ParseJSFromCode(jsCode string, source string, verbosity bool) {
 		log.Fatal("Error reading regex patterns: ", err)
 	}
 
-	regexProperties := regexmod.RegexProperties{Type: "endpoint", MatchLine: false, CaseInsensitive: true, Confidence: "high"} // Example properties
-
-	/* to fetch from JSON file
+	/* // to fetch from JSON file
 	categories, _ := fetchcode.FetchPatternsFromJSON()
-	for pattern, regexProperties := range categories { */
+	for pattern, regexProperties := range categories {*/
 	for _, pattern := range patterns {
-
+		regexProperties := regexmod.DetermineProperties(pattern, "")
 		regexpPattern, err := regexmod.CompilePattern(pattern, regexProperties)
 		if err != nil {
 			log.Fatal("Error compiling regular expression '", pattern, "': ", err)
 		}
 		matchTest, _ = regexpPattern.FindStringMatch(jsCode)
 
-		for matchTest != nil {
+		for matchTest != nil && misc.Contains(matches, matchTest.String()) == false {
+
 			matches = append(matches, matchTest.String())
 			match := matchTest.String()
 			if len(match) > 1000 {

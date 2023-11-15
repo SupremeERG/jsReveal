@@ -68,3 +68,8 @@ fetch\(['"]https:\/\/[\w\d.-]+\/api\/data['"],\s*\{ headers:\s*\{['"]Content-Typ
 graphql\([^)]+\)
 new GraphQLClient\([^)]+\)
 graphqlRequestClient\.request\([^)]+\)
+(s3.amazonaws.com|rds.amazonaws.com|cache.amazonaws.com)
+blob.core.windows.net
+onedrive.live.com
+1drv.com
+(storage.googleapis.com|storage.cloud.google.com|storage-download.googleapis.com|content-storage-upload.googleapis.com|content-storage-download.googleapis.com).*(?:\n|$)
