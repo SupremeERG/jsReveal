@@ -6,8 +6,6 @@ import (
 	"github.com/dlclark/regexp2"
 )
 
-const Version = "v1.0.0"
-
 type RegexProperties struct {
 	MatchLine       bool   `json:"match_line"`
 	CaseInsensitive bool   `json:"case_insensitive"`
@@ -26,4 +24,14 @@ func CompilePattern(pattern string, regexProperties RegexProperties) (*regexp2.R
 	}
 
 	return regexp2.Compile(validPattern, flags)
+}
+
+func DetermineProperties(pattern string, file string) RegexProperties {
+	// file is the file of regular expressions
+	// pattern is the actual regular expression
+
+	properties := RegexProperties{MatchLine: false, CaseInsensitive: false, Confidence: "high"}
+
+	// add code for certain detections (endpoints = high confidence, credentials = medium confidence, )
+	return properties
 }
