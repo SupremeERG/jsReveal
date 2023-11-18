@@ -29,8 +29,14 @@ func CompilePattern(pattern string, regexProperties RegexProperties) (*regexp2.R
 func DetermineProperties(pattern string, file string) RegexProperties {
 	// file is the file of regular expressions
 	// pattern is the actual regular expression
-
-	properties := RegexProperties{MatchLine: false, CaseInsensitive: false, Confidence: "high"}
+	var category string
+	switch file {
+	default:
+		category = "Unindentified"
+	case "api_key_regex.txt":
+		category = "Endpoint (API)"
+	}
+	properties := RegexProperties{MatchLine: false, CaseInsensitive: false, Confidence: "high", Type: category}
 
 	// add code for certain detections (endpoints = high confidence, credentials = medium confidence, )
 	return properties

@@ -38,10 +38,10 @@ func FetchJSFromURL(url string, channel chan string) { //(string, error) {
 	return
 }
 
-func FetchPatterns() ([]string, error) {
-	file, err := os.Open("regex.txt") // Replace with your file path
+func FetchPatterns(regexFile string) ([]string, string, error) {
+	file, err := os.Open(regexFile) // Replace with your file path
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	}
 	defer file.Close()
 
@@ -51,7 +51,7 @@ func FetchPatterns() ([]string, error) {
 		patterns = append(patterns, scanner.Text())
 	}
 
-	return patterns, scanner.Err()
+	return patterns, regexFile, scanner.Err()
 
 }
 
