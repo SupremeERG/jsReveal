@@ -170,6 +170,8 @@ func findAndPrintMatches(regexpPattern *regexp2.Regexp, jsCode string, regexProp
 
 	for matchTest != nil {
 		match := matchTest.String()
+
+		// Check for duplicates
 		if misc.Contains(matches, match) {
 			continue
 		}
