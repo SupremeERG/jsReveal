@@ -31,22 +31,43 @@ func readJSLinks(filePath string) ([]string, error) {
 
 func main() {
 	options := runner.ParseOptions()
-
+	outputChannel := make(chan string)
 	cleanPattern, _ := regexp.Compile(".*/")
-	switch options.Source {
-	default:
-		fmt.Println("./jsReveal -u <url to JS file>")
-	case 1:
-		parser.ParseJS(options.JSFilePath, options.Verbose, options.RegexFilePath)
-	case 2: // -l flag for a file containing multiple JS file paths
-		parser.ParseJSFromList(options.JSLinksPath, options.Verbose, options.RegexFilePath)
-	case 3:
-		if options.Verbose {
-			log.Println("Processing Code from " + cleanPattern.ReplaceAllString(options.JSURL, ""))
+	go func() {
+		switch options.Source {
+		default:
+			fmt.Println("./jsReveal -u <url to JS file>")
+		case 1:
+			parser.ParseJS(options.JSFilePath, options.Verbose, options.RegexFilePath, outputChannel)
+		case 2: // -l flag for a file containing multiple JS file paths
+			parser.ParseJSFromList(options.JSLinksPath, options.Verbose, options.RegexFilePath, outputChannel)
+		case 3:
+			if options.Verbose {
+				log.Println("Processing Code from " + cleanPattern.ReplaceAllString(options.JSURL, ""))
+			}
+			ch := make(chan string)
+			go fetchcode.FetchJSFromURL(options.JSURL, ch)
+			jsCode := <-ch
+			parser.ParseJSFromCode(jsCode, options.JSURL, options.Verbose, options.RegexFilePath, outputChannel)
 		}
-		ch := make(chan string)
-		go fetchcode.FetchJSFromURL(options.JSURL, ch)
-		jsCode := <-ch
-		parser.ParseJSFromCode(jsCode, options.JSURL, options.Verbose, options.RegexFilePath)
+	}()
+
+	// output functionality
+	if options.FileOutput != "" {
+		f, err := os.Create(options.FileOutput)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer f.Close()
+
+		w := bufio.NewWriter(f)
+		for output := range outputChannel {
+			fmt.Fprintf(w, output)
+			w.Flush()
+		}
+	} else {
+		for output := range outputChannel {
+			fmt.Println(output)
+		}
 	}
 }
