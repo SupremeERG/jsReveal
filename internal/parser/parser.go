@@ -25,7 +25,7 @@ func parse(patterns []string, jsCode string, verbosity bool, source string, rege
 		regexProperties := regexmod.DetermineProperties(pattern, regexFile)
 		regexpPattern, err := regexmod.CompilePattern(pattern, regexProperties)
 		if err != nil {
-			log.Fatal("Error compiling regular expression '", pattern, "': ", err)
+			log.Fatalf(`{"Error compiling regular expression": "%s", "Pattern": "%s", "Error": "%v"}`, pattern, err)
 		}
 		matchTest, _ = regexpPattern.FindStringMatch(jsCode)
 
@@ -36,9 +36,9 @@ func parse(patterns []string, jsCode string, verbosity bool, source string, rege
 				match = match[:250] + "\n" // Prevents large blocks of code
 			}
 			if verbosity {
-				fmt.Printf("Category: %s\nMatch: %s\nConfidence: %s\nSource: %s\n\n\n", regexProperties.Type, match, regexProperties.Confidence, source)
+				log.Printf(`{"Category": "%s", "Match": "%s", "Confidence": "%s", "Source": "%s"}`, regexProperties.Type, match, regexProperties.Confidence, source)
 			} else {
-				fmt.Printf("%s\t(%s)\n\n", match, source)
+				log.Printf(`{"Match": "%s", "Source": "%s"}`, match, source)
 			}
 			matchTest, _ = regexpPattern.FindNextMatch(matchTest)
 		}
@@ -49,12 +49,12 @@ func parse(patterns []string, jsCode string, verbosity bool, source string, rege
 func ParseJS(jsFilePath string, verbosity bool, regexFilePath string) {
 	jsCode, err := os.ReadFile(jsFilePath)
 	if err != nil {
-		log.Fatalf("Error reading JS file: %v", err)
+		log.Fatalf(`{"Error reading JS file": "%v"}`, err)
 	}
 
 	patterns, regexFile, err := fetchcode.FetchPatterns(regexFilePath) // Adjust to capture all returned values
 	if err != nil {
-		log.Fatalf("Error reading regex patterns from %s: %v", regexFilePath, err)
+		log.Fatalf(`{"Error reading regex patterns": "%s", "Error": "%v"}`, regexFilePath, err)
 	}
 
 	parse(patterns, string(jsCode), verbosity, jsFilePath, regexFile)
@@ -86,7 +86,7 @@ const MaxConcurrentJobs = 10 // Adjust the concurrency level as needed
 func ParseJSFromList(listFilePath string, verbosity bool, regexFilePath string) {
 	listContent, err := os.ReadFile(listFilePath)
 	if err != nil {
-		log.Fatalf("Error reading list file: %v", err)
+		log.Fatalf(`{"Error reading list file": "%v"}`, err)
 	}
 
 	jsURLs := strings.Split(string(listContent), "\n")
@@ -120,13 +120,13 @@ func worker(wg *sync.WaitGroup, jobs <-chan string, verbosity bool, regexFilePat
 
 		jsURL = strings.TrimSpace(jsURL)
 		if _, err := url.ParseRequestURI(jsURL); err != nil {
-			log.Printf("Invalid URL: %s. Error: %v\n", jsURL, err)
+			log.Printf(`{"Invalid URL": "%s", "Error": "%v"}`, jsURL, err)
 			continue
 		}
 
 		jsCode, err := FetchJSFromURL(jsURL)
 		if err != nil {
-			log.Printf("Failed to fetch JS from URL '%s': %v", jsURL, err)
+			log.Printf(`{"Failed to fetch JS from URL": "%s", "Error": "%v"}`, jsURL, err)
 			continue
 		}
 
