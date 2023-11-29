@@ -31,22 +31,67 @@ func readJSLinks(filePath string) ([]string, error) {
 
 func main() {
 	options := runner.ParseOptions()
-
+	outputChannel := make(chan string)
 	cleanPattern, _ := regexp.Compile(".*/")
-	switch options.Source {
-	default:
-		fmt.Println("./jsReveal -u <url to JS file>")
-	case 1:
-		parser.ParseJS(options.JSFilePath, options.Verbose, options.RegexFilePath)
-	case 2: // -l flag for a file containing multiple JS file paths
-		parser.ParseJSFromList(options.JSLinksPath, options.Verbose, options.RegexFilePath)
-	case 3:
-		if options.Verbose {
-			log.Println("Processing Code from " + cleanPattern.ReplaceAllString(options.JSURL, ""))
+	go func() {
+		switch options.Source {
+		default:
+			fmt.Println("./jsReveal -u <url to JS file>")
+		case 1:
+			parser.ParseJS(options.JSFilePath, options.Verbose, options.RegexFilePath, outputChannel)
+		case 2: // -l flag for a file containing multiple JS file paths
+			parser.ParseJSFromList(options.JSLinksPath, options.Verbose, options.RegexFilePath, outputChannel)
+		case 3:
+			if options.Verbose {
+				log.Println("Processing Code from " + cleanPattern.ReplaceAllString(options.JSURL, ""))
+			}
+			ch := make(chan string)
+			go fetchcode.FetchJSFromURL(options.JSURL, ch)
+			jsCode := <-ch
+			parser.ParseJSFromCode(jsCode, options.JSURL, options.Verbose, options.RegexFilePath, outputChannel)
 		}
-		ch := make(chan string)
-		go fetchcode.FetchJSFromURL(options.JSURL, ch)
-		jsCode := <-ch
-		parser.ParseJSFromCode(jsCode, options.JSURL, options.Verbose, options.RegexFilePath)
+	}()
+
+	// output functionality
+	if options.FileOutput != "" {
+		f, err := os.Create(options.FileOutput)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer f.Close()
+
+		fmt.Println("sorry, idk how to convert data into json (yet)")
+		//w := bufio.NewWriter(f)
+		/*
+			parentObject := map[string]string{}
+			for output := range outputChannel {
+				if options.Verbose {
+					// I cant do it man [ :( ] I don't know how to
+					/x*
+						var currentEntry = map[string]string{}
+						// JSON
+						for _, line := range strings.Split(output, "\n") {
+							parts := strings.SplitN(line, ":", 2)
+							key := strings.TrimSpace(parts[0])
+							value := strings.TrimSpace(parts[1])
+							if key == "Match" {
+								parentObject[value] =
+								currententry = parentObject[key]
+							}
+						}
+						f.Write(currentEntry)
+					*x/
+				}
+
+			}
+
+			/x*
+				fmt.Fprintf(w, output)
+				w.Flush()*x/*/
+
+	} else {
+		for output := range outputChannel {
+			fmt.Println(output)
+		}
 	}
 }

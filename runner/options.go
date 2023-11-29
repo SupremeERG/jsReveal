@@ -3,29 +3,32 @@ package runner
 import (
 	"flag"
 	"fmt"
+	"log"
 	"path/filepath"
 	"runtime"
 )
 
 var helpMsg = `
 Usage
--f  -- Path to target JS file
--l  -- Path to a file with JS URLs
--u  -- URL to a singular JS file
--v  -- Enable Verbosity
---api-endpoint  -- Use predefined regex file for API endpoints
---api-key       -- Use predefined regex file for API keys
+-f  		-- Path to target JS file
+-l  		-- Path to a file with JS URLs
+-u  		-- URL to a singular JS file
+-v  		-- Enable Verbosity
+--endpoint  -- Use predefined regex file for API endpoints and directories
+--api-key  	-- Use predefined regex file for API keys
+-o			-- Send output to file (JSON)
 `
 
 type Options struct {
-	JSFilePath     string
-	JSLinksPath    string
-	JSURL          string
-	Source         int
-	Verbose        bool
-	UseAPIEndpoint bool
-	UseAPIKey      bool
-	RegexFilePath  string
+	JSFilePath      string
+	JSLinksPath     string
+	JSURL           string
+	Source          int
+	SearchEndpoints bool
+	SearchAPIKey    bool
+	RegexFilePath   string
+	Verbose         bool
+	FileOutput      string
 }
 
 func ParseOptions() Options {
@@ -38,9 +41,10 @@ func ParseOptions() Options {
 	flag.StringVar(&options.JSFilePath, "f", "", "Path to the .js file")
 	flag.StringVar(&options.JSLinksPath, "l", "", "Path to the file with JS links")
 	flag.StringVar(&options.JSURL, "u", "", "URL to a JS file")
+	flag.BoolVar(&options.SearchEndpoints, "endpoint", false, "Use predefined regex file for API endpoints")
+	flag.BoolVar(&options.SearchAPIKey, "api-key", false, "Use predefined regex file for API keys")
 	flag.BoolVar(&options.Verbose, "v", false, "Enable verbose output")
-	flag.BoolVar(&options.UseAPIEndpoint, "api-endpoint", false, "Use predefined regex file for API endpoints")
-	flag.BoolVar(&options.UseAPIKey, "api-key", false, "Use predefined regex file for API keys")
+	flag.StringVar(&options.FileOutput, "o", "", "Send output to file (JSON)")
 
 	flag.Usage = func() {
 		fmt.Print(helpMsg)
@@ -48,10 +52,40 @@ func ParseOptions() Options {
 
 	flag.Parse()
 
-	if options.UseAPIKey {
-		options.RegexFilePath = filepath.Join(basepath, "api_key_regex.txt")
-	} else { // Default to API endpoint regex file
+	/*
+		parseCategories := []bool{options.SearchEndpoints, options.SearchAPIKey}
+		for i := 0; i < len(parseCategories); i++ {
+			/x*
+				option 0 = options.SearchEndpoints
+				option 1 = options.SearchAPIKey
+			*x/
+			if parseCategories[i] == true {
+				if i == 0 {
+					// options.RegexFilePath = filepath.Join(basepath, "api_endpoints_regex.txt")
+
+				} else if i == 1 {
+					options.RegexFilePath = filepath.Join(basepath, "api_key_regex.txt")
+
+				}
+			}
+			if i == (len(parseCategories) - 1)
+		}*/
+	/*
+		if options.SearchAPIKey {
+			options.RegexFilePath = filepath.Join(basepath, "api_key_regex.txt")
+		} else { // Default to API endpoint regex file
+			options.RegexFilePath = filepath.Join(basepath, "regex.txt")
+		}*/
+
+	switch {
+	default:
 		options.RegexFilePath = filepath.Join(basepath, "regex.txt")
+	case options.SearchEndpoints:
+		log.Fatal("endpoints regular expressions not implemented yet, sorry")
+		//		options.RegexFilePath = filepath.Join(basepath, "endpoints.txt")
+	case options.SearchAPIKey:
+		options.RegexFilePath = filepath.Join(basepath, "api_key_regex.txt")
+
 	}
 
 	switch {
