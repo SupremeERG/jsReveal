@@ -3,7 +3,6 @@ package runner
 import (
 	"flag"
 	"fmt"
-	"log"
 	"path/filepath"
 	"runtime"
 )
@@ -81,8 +80,8 @@ func ParseOptions() Options {
 	default:
 		options.RegexFilePath = filepath.Join(basepath, "regex.txt")
 	case options.SearchEndpoints:
-		log.Fatal("endpoints regular expressions not implemented yet, sorry")
-		//		options.RegexFilePath = filepath.Join(basepath, "endpoints.txt")
+		//		log.Fatal("endpoints regular expressions not implemented yet, sorry")
+		options.RegexFilePath = filepath.Join(basepath, "endpoints.txt")
 	case options.SearchAPIKey:
 		options.RegexFilePath = filepath.Join(basepath, "api_key_regex.txt")
 

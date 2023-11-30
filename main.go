@@ -60,35 +60,11 @@ func main() {
 		}
 		defer f.Close()
 
-		fmt.Println("sorry, idk how to convert data into json (yet)")
-		//w := bufio.NewWriter(f)
-		/*
-			parentObject := map[string]string{}
-			for output := range outputChannel {
-				if options.Verbose {
-					// I cant do it man [ :( ] I don't know how to
-					/x*
-						var currentEntry = map[string]string{}
-						// JSON
-						for _, line := range strings.Split(output, "\n") {
-							parts := strings.SplitN(line, ":", 2)
-							key := strings.TrimSpace(parts[0])
-							value := strings.TrimSpace(parts[1])
-							if key == "Match" {
-								parentObject[value] =
-								currententry = parentObject[key]
-							}
-						}
-						f.Write(currentEntry)
-					*x/
-				}
-
-			}
-
-			/x*
-				fmt.Fprintf(w, output)
-				w.Flush()*x/*/
-
+		w := bufio.NewWriter(f)
+		for output := range outputChannel {
+			fmt.Fprintln(w, output)
+			w.Flush()
+		}
 	} else {
 		for output := range outputChannel {
 			fmt.Println(output)

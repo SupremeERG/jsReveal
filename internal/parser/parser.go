@@ -17,7 +17,7 @@ import (
 )
 
 // parse applies regex patterns to a given string of JavaScript code.
-func parse(patterns []string, jsCode string, verbosity bool, source string, regexFile string, outputChan chan string) {
+func parse(patterns []string, jsCode string, verbosity bool, source string, regexFile string, outputChan chan<- string) {
 	var matchTest *regexp2.Match
 	var matches = []string{}
 
@@ -32,15 +32,9 @@ func parse(patterns []string, jsCode string, verbosity bool, source string, rege
 		for matchTest != nil && !misc.Contains(matches, matchTest.String()) {
 			matches = append(matches, matchTest.String())
 			match := matchTest.String()
-			if len(match) > 1000 {
-				match = match[:250] + "\n" // Prevents large blocks of code
-			}
-			if verbosity {
-				log.Printf(`{"Category": "%s", "Match": "%s", "Confidence": "%s", "Source": "%s"}`, regexProperties.Type, match, regexProperties.Confidence, source)
-			} else {
-				log.Printf(`{"Match": "%s", "Source": "%s"}`, match, source)
-			}
+			outputChan <- fmt.Sprintf(`{"Category": "%s", "Match": "%s", "Confidence": "%s", "Source": "%s"}`, regexProperties.Type, match, regexProperties.Confidence, source)
 			matchTest, _ = regexpPattern.FindNextMatch(matchTest)
+			close(outputChan)
 		}
 	}
 }
