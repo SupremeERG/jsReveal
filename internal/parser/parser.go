@@ -34,7 +34,7 @@ func parse(patterns []string, jsCode string, verbosity bool, source string, rege
 			match := matchTest.String()
 			outputChan <- fmt.Sprintf(`{"Category": "%s", "Match": "%s", "Confidence": "%s", "Source": "%s"}`, regexProperties.Type, match, regexProperties.Confidence, source)
 			matchTest, _ = regexpPattern.FindNextMatch(matchTest)
-			close(outputChan)
+
 		}
 	}
 }
