@@ -2,10 +2,12 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
 	"regexp"
+	"strings"
 
 	"github.com/SupremeERG/jsReveal/internal/parser"
 	"github.com/SupremeERG/jsReveal/pkg/fetchcode"
@@ -72,8 +74,45 @@ func main() {
 			defer f.Close()
 
 			w := bufio.NewWriter(f)
+
+			jsonData := make(map[string]interface{})
 			for output := range outputChannel {
-				fmt.Fprintln(w, output)
+				parts := strings.Fields(output)
+
+				/*
+					// Create a map to hold the JSON structure
+					jsonData := map[string]interface{}{
+						"type":       parts[0],
+						"confidence": parts[2],
+						"source":     parts[3],
+					}
+
+					// Add the line data to the overall JSON data map
+
+					// Convert the map to JSON
+					jsonBytes, err := json.MarshalIndent(map[string]interface{}{fmt.Sprintf("\"%s\"", parts[1]): jsonData}, "", "    ")
+					if err != nil {
+						fmt.Println("Error marshaling JSON:", err)
+						return
+					}*/
+				lineData := map[string]interface{}{
+					"type":       parts[0],
+					"confidence": parts[2],
+					"source":     parts[3],
+				}
+
+				// Add the line data to the overall JSON data map
+				jsonData[fmt.Sprintf("\"%s\"", parts[1])] = lineData
+
+				jsonBytes, err := json.MarshalIndent(jsonData, "", "    ")
+				if err != nil {
+					fmt.Println("Error marshaling JSON:", err)
+					return
+				}
+
+				// Write the JSON to the file
+				fmt.Fprintln(w, string(jsonBytes))
+				//fmt.Fprintln(w, output)
 				w.Flush()
 			}
 		} else {

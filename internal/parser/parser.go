@@ -25,14 +25,19 @@ func parse(patterns []string, jsCode string, verbosity bool, source string, rege
 		regexProperties := regexmod.DetermineProperties(pattern, regexFile)
 		regexpPattern, err := regexmod.CompilePattern(pattern, regexProperties)
 		if err != nil {
-			log.Fatalf(`{"Error compiling regular expression": "%s", "Pattern": "%s", "Error": "%v"}`, pattern, err)
+			log.Fatalf(`{"Error compiling regular expression", "Pattern": "%s", "Error": "%v"}`, pattern, err)
 		}
 		matchTest, _ = regexpPattern.FindStringMatch(jsCode)
 
 		for matchTest != nil && !misc.Contains(matches, matchTest.String()) {
 			matches = append(matches, matchTest.String())
 			match := matchTest.String()
-			outputChan <- fmt.Sprintf(`{"Category": "%s", "Match": "%s", "Confidence": "%s", "Source": "%s"}`, regexProperties.Type, match, regexProperties.Confidence, source)
+			if verbosity == true {
+				outputChan <- fmt.Sprintf("%s\n%s\n%s\n%s\n\n\n", regexProperties.Type, match, regexProperties.Confidence, source) //fmt.Sprintf(`{"Category": "%s", "Match": "%s", "Confidence": "%s", "Source": "%s"}`, regexProperties.Type, match, regexProperties.Confidence, source)
+
+			} else {
+				outputChan <- "turn on verbosity"
+			}
 			matchTest, _ = regexpPattern.FindNextMatch(matchTest)
 
 		}
@@ -140,58 +145,3 @@ func ParseJSFromCode(jsCode string, source string, verbosity bool, regexFilePath
 	parse(patterns, jsCode, verbosity, source, regexFile, outputChan)
 	//applyRegexPatterns(patterns, jsCode, verbosity, source, regexFile)
 }
-
-/*
-
-// applyRegexPatterns applies a set of regex patterns to a given string of JavaScript code.
-func applyRegexPatterns(patterns []string, jsCode string, verbosity bool, source string, regexFile string) {
-	for _, pattern := range patterns {
-		regexProperties := regexmod.DetermineProperties(pattern, regexFile)
-		regexpPattern, err := regexmod.CompilePattern(pattern, regexProperties)
-		if err != nil {
-			log.Fatalf("Error compiling regular expression '%s': %v", pattern, err)
-		}
-
-		findAndPrintMatches(regexpPattern, jsCode, regexProperties, verbosity, source)
-	}
-}
-
-// findAndPrintMatches finds and prints matches of a compiled regex pattern in a given JavaScript code.
-func findAndPrintMatches(regexpPattern *regexp2.Regexp, jsCode string, regexProperties regexmod.RegexProperties, verbosity bool, source string) {
-	var matches []string
-	matchTest, err := regexpPattern.FindStringMatch(jsCode)
-	if err != nil {
-		log.Printf("Error finding matches for the pattern: %v", err)
-		return
-	}
-
-	for matchTest != nil {
-		match := matchTest.String()
-
-		// Check for duplicates
-		if misc.Contains(matches, match) {
-			continue
-		}
-
-		matches = append(matches, match)
-
-		// Truncate long matches
-		if len(match) > 1000 {
-			match = match[:250] + "..."
-		}
-
-		// Print match based on verbosity
-		if verbosity {
-			outputChan <- fmt.Sprintf("Category: %s\nMatch: %s\nConfidence: %s\nSource: %s\n\n", regexProperties.Type, match, regexProperties.Confidence, source)
-		} else {
-			outputChan <- fmt.Sprintf("%s\t(%s)\n", match, source)
-		}
-
-		matchTest, err = regexpPattern.FindNextMatch(matchTest)
-		if err != nil {
-			log.Printf("Error finding next match: %v", err)
-			break
-		}
-	}
-}
-*/
