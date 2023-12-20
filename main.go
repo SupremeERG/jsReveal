@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -11,6 +10,7 @@ import (
 
 	"github.com/SupremeERG/jsReveal/internal/parser"
 	"github.com/SupremeERG/jsReveal/pkg/fetchcode"
+	"github.com/SupremeERG/jsReveal/pkg/misc"
 	"github.com/SupremeERG/jsReveal/runner"
 )
 
@@ -67,53 +67,38 @@ func main() {
 
 		// Output Component
 		if options.FileOutput != "" {
-			f, err := os.Create(options.FileOutput)
-			if err != nil {
-				log.Fatal(err)
-			}
-			defer f.Close()
-
-			w := bufio.NewWriter(f)
 
 			jsonData := make(map[string]interface{})
 			for output := range outputChannel {
-				parts := strings.Fields(output)
+				var parts []string
+				var lineData map[string]interface{}
 
-				/*
-					// Create a map to hold the JSON structure
-					jsonData := map[string]interface{}{
+				if options.Verbose == true {
+
+					parts = strings.Fields(output)
+					lineData = map[string]interface{}{
 						"type":       parts[0],
 						"confidence": parts[2],
 						"source":     parts[3],
 					}
-
-					// Add the line data to the overall JSON data map
-
-					// Convert the map to JSON
-					jsonBytes, err := json.MarshalIndent(map[string]interface{}{fmt.Sprintf("\"%s\"", parts[1]): jsonData}, "", "    ")
-					if err != nil {
-						fmt.Println("Error marshaling JSON:", err)
-						return
-					}*/
-				lineData := map[string]interface{}{
-					"type":       parts[0],
-					"confidence": parts[2],
-					"source":     parts[3],
+				} else {
+					parts = strings.Fields(output)
+					lineData = map[string]interface{}{
+						"source": parts[1],
+					}
 				}
 
-				// Add the line data to the overall JSON data map
-				jsonData[fmt.Sprintf("\"%s\"", parts[1])] = lineData
-
-				jsonBytes, err := json.MarshalIndent(jsonData, "", "    ")
+				existingData, err := misc.ReadExistingJSON(options.FileOutput)
 				if err != nil {
-					fmt.Println("Error marshaling JSON:", err)
-					return
+					// Add the line data to the overall JSON data map
+					jsonData[fmt.Sprintf("\"%s\"", parts[1])] = lineData
+					misc.WriteJSONToFile(options.FileOutput, jsonData)
+				} else {
+					// Add the line data to the overall JSON data map
+					existingData[fmt.Sprintf("\"%s\"", parts[1])] = lineData
+					misc.WriteJSONToFile(options.FileOutput, existingData)
 				}
 
-				// Write the JSON to the file
-				fmt.Fprintln(w, string(jsonBytes))
-				//fmt.Fprintln(w, output)
-				w.Flush()
 			}
 		} else {
 			for output := range outputChannel {
