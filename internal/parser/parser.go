@@ -13,6 +13,7 @@ import (
 	"github.com/SupremeERG/jsReveal/pkg/fetchcode"
 	"github.com/SupremeERG/jsReveal/pkg/misc"
 	"github.com/SupremeERG/jsReveal/pkg/regexmod"
+	"github.com/SupremeERG/opshins"
 	"github.com/dlclark/regexp2"
 )
 
@@ -84,7 +85,9 @@ const MaxConcurrentJobs = 10 // Adjust the concurrency level as needed
 
 func ParseJSFromList(listFilePath string, verbosity bool, regexFilePath string, outputChan chan string) {
 	if strings.HasSuffix(listFilePath, ".js") == true {
-
+		if opshins.PromptYN(fmt.Sprintf("%s looks like a javascript file, not a wordlist of JS URLs. Are you sure you want to use this file?", listFilePath), "yes", " > ") == "no" {
+			return
+		}
 	}
 	listContent, err := os.ReadFile(listFilePath)
 	if err != nil {
