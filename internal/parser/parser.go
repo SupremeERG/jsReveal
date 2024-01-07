@@ -83,6 +83,9 @@ func FetchJSFromURL(jsURL string) (string, error) {
 const MaxConcurrentJobs = 10 // Adjust the concurrency level as needed
 
 func ParseJSFromList(listFilePath string, verbosity bool, regexFilePath string, outputChan chan string) {
+	if strings.HasSuffix(listFilePath, ".js") == true {
+
+	}
 	listContent, err := os.ReadFile(listFilePath)
 	if err != nil {
 		log.Fatalf(`{"Error reading list file": "%v"}`, err)
