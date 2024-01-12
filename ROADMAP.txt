@@ -7,3 +7,5 @@ roadmap for potential features and capabilities'
 2. Documentation and Release
     - 1) Simply just add documentation on the github
     - 2) Start versioning our updates and make sure code doesn't have unimportant notes
+3. Options
+    - 1) The user should have more versatility when it comes to output: they should have the option to use JSON or simple line output
