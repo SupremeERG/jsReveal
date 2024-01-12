@@ -62,48 +62,48 @@ func main() {
 	if options.Source == 0 {
 		fmt.Println("./jsReveal -u <url to JS file>")
 		return
+	}
+	go run(options, outputChannel, cleanPattern)
+
+	// Output Component
+	if options.FileOutput != "" {
+
+		jsonData := make(map[string]interface{})
+		for output := range outputChannel {
+			var parts []string
+			var lineData map[string]interface{}
+
+			if options.Verbose == true {
+
+				parts = strings.Fields(output)
+				lineData = map[string]interface{}{
+					"type":       parts[0],
+					"confidence": parts[2],
+					"source":     parts[3],
+				}
+			} else {
+				parts = strings.Fields(output)
+				lineData = map[string]interface{}{
+					"source": parts[1],
+				}
+			}
+
+			existingData, err := misc.ReadExistingJSON(options.FileOutput)
+			if err != nil {
+				// Add the line data to the overall JSON data map
+				jsonData[fmt.Sprintf("\"%s\"", parts[1])] = lineData
+				misc.WriteJSONToFile(options.FileOutput, jsonData)
+			} else {
+				// Add the line data to the overall JSON data map
+				existingData[fmt.Sprintf("\"%s\"", parts[1])] = lineData
+				misc.WriteJSONToFile(options.FileOutput, existingData)
+			}
+
+		}
 	} else {
-		go run(options, outputChannel, cleanPattern)
-
-		// Output Component
-		if options.FileOutput != "" {
-
-			jsonData := make(map[string]interface{})
-			for output := range outputChannel {
-				var parts []string
-				var lineData map[string]interface{}
-
-				if options.Verbose == true {
-
-					parts = strings.Fields(output)
-					lineData = map[string]interface{}{
-						"type":       parts[0],
-						"confidence": parts[2],
-						"source":     parts[3],
-					}
-				} else {
-					parts = strings.Fields(output)
-					lineData = map[string]interface{}{
-						"source": parts[1],
-					}
-				}
-
-				existingData, err := misc.ReadExistingJSON(options.FileOutput)
-				if err != nil {
-					// Add the line data to the overall JSON data map
-					jsonData[fmt.Sprintf("\"%s\"", parts[1])] = lineData
-					misc.WriteJSONToFile(options.FileOutput, jsonData)
-				} else {
-					// Add the line data to the overall JSON data map
-					existingData[fmt.Sprintf("\"%s\"", parts[1])] = lineData
-					misc.WriteJSONToFile(options.FileOutput, existingData)
-				}
-
-			}
-		} else {
-			for output := range outputChannel {
-				fmt.Println(output)
-			}
+		for output := range outputChannel {
+			fmt.Println(output)
 		}
 	}
+
 }

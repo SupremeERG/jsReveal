@@ -34,7 +34,7 @@ func parse(patterns []string, jsCode string, verbosity bool, source string, rege
 			matches = append(matches, matchTest.String())
 			match := matchTest.String()
 			if verbosity == true {
-				outputChan <- fmt.Sprintf("%s\n%s\n%s\n%s\n\n\n", regexProperties.Type, match, regexProperties.Confidence, source) //fmt.Sprintf(`{"Category": "%s", "Match": "%s", "Confidence": "%s", "Source": "%s"}`, regexProperties.Type, match, regexProperties.Confidence, source)
+				outputChan <- fmt.Sprintf("%s\n%s\n%s\n%s\n\n\n", regexProperties.Type, match, regexProperties.Confidence, source)
 
 			} else {
 				outputChan <- fmt.Sprintf("%s\n%s\n\n", match, source)
@@ -43,6 +43,7 @@ func parse(patterns []string, jsCode string, verbosity bool, source string, rege
 
 		}
 	}
+
 }
 
 // ParseJS parses JavaScript code from a file using specified regex patterns.
