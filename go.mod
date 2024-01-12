@@ -1,6 +1,6 @@
 module github.com/SupremeERG/jsReveal
 
-go 1.21.3
+go 1.21
 
 replace github.com/SupremeERG/jsReveal/pkg/regexmod => ./pkg/regexmod
 
