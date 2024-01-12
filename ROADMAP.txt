@@ -8,3 +8,4 @@ roadmap for potential features and capabilities'
     - 1) Add documentation on the github
     - 2) Version our updates and make sure code doesn't have unimportant notes
 3. Options
+    - 1) Add more versatility when it comes to output: they should have the option to use JSON or simple line output
