@@ -33,7 +33,6 @@ func FetchJSFromURL(url string, channel chan string) { //(string, error) {
 		log.Fatal("Error reading JS: ", err)
 		return
 	}
-
 	channel <- string(body) // string(body) is the JS code
 	return
 }
