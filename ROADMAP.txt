@@ -1,0 +1,11 @@
+roadmap for potential features and capabilities'
+
+1. Regexes and detection
+    - 1) Improve and make more endpoint regular expressions
+    - 2) Find more detection methods (like the one in js-miner)
+    - 3) Make more credential endpoints
+2. Documentation and Release
+    - 1) Add documentation on the github
+    - 2) Version our updates and make sure code doesn't have unimportant notes
+3. Options
+    - 1) Add more versatility when it comes to output: they should have the option to use JSON or simple line output
