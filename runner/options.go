@@ -78,7 +78,8 @@ func ParseOptions() Options {
 
 	switch {
 	default:
-		options.RegexFilePath = filepath.Join(basepath, "regex.txt")
+		fmt.Println("Scanning for endpoints (default option)")
+		options.RegexFilePath = filepath.Join(basepath, "endpoints.txt")
 	case options.SearchEndpoints:
 		//		log.Fatal("endpoints regular expressions not implemented yet, sorry")
 		options.RegexFilePath = filepath.Join(basepath, "endpoints.txt")
