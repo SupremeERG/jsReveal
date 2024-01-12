@@ -86,9 +86,11 @@ const MaxConcurrentJobs = 10 // Adjust the concurrency level as needed
 func ParseJSFromList(listFilePath string, verbosity bool, regexFilePath string, outputChan chan string) {
 	if strings.HasSuffix(listFilePath, ".js") == true {
 		if opshins.PromptYN(fmt.Sprintf("%s looks like a javascript file, not a wordlist of JS URLs. Are you sure you want to use this file?", listFilePath), "yes", " > ") == "no" {
+			close(outputChan)
 			return
 		}
 	}
+
 	listContent, err := os.ReadFile(listFilePath)
 	if err != nil {
 		log.Fatalf(`{"Error reading list file": "%v"}`, err)
@@ -103,10 +105,11 @@ func ParseJSFromList(listFilePath string, verbosity bool, regexFilePath string, 
 	var wg sync.WaitGroup
 	for i := 0; i < MaxConcurrentJobs; i++ {
 		wg.Add(1)
-		go worker(&wg, jobs, verbosity, regexFilePath, outputChan)
+		go urlWorker(&wg, jobs, verbosity, regexFilePath, outputChan)
 	}
 
 	// Distribute work
+
 	for _, url := range jsURLs {
 		jobs <- url
 	}
@@ -116,7 +119,7 @@ func ParseJSFromList(listFilePath string, verbosity bool, regexFilePath string, 
 	wg.Wait()
 }
 
-func worker(wg *sync.WaitGroup, jobs <-chan string, verbosity bool, regexFilePath string, outputChan chan string) {
+func urlWorker(wg *sync.WaitGroup, jobs <-chan string, verbosity bool, regexFilePath string, outputChan chan string) {
 	defer wg.Done()
 	for jsURL := range jobs {
 		if jsURL == "" {
