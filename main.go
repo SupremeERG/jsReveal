@@ -6,9 +6,11 @@ import (
 	"log"
 	"os"
 	"regexp"
+	"strings"
 
 	"github.com/SupremeERG/jsReveal/internal/parser"
 	"github.com/SupremeERG/jsReveal/pkg/fetchcode"
+	"github.com/SupremeERG/jsReveal/pkg/misc"
 	"github.com/SupremeERG/jsReveal/runner"
 )
 
@@ -29,41 +31,79 @@ func readJSLinks(filePath string) ([]string, error) {
 	return links, scanner.Err()
 }
 
-func main() {
-	options := runner.Run()
-
-	cleanPattern, _ := regexp.Compile(".*/") // Used to make links more readable
+func run(options runner.Options, outputChannel chan string, cleanPattern *regexp.Regexp) {
 	switch options.Source {
-	default: // no option selected
-		fmt.Println("./jsReveal -u <url to JS file>")
-	case 1: // single file
-		parser.ParseJS(options.JSFilePath, options.Verbose)
-
-	case 2: // multiple URLs
-		if options.Verbose {
-			log.Println("Processing JS links from file:", cleanPattern.ReplaceAllString(options.JSLinksPath, ""))
-		}
-
-		links, err := readJSLinks(options.JSLinksPath)
-		if err != nil {
-			log.Fatal("Error reading JS links: ", err)
-		}
-
-		ch := make(chan string)
-		for _, link := range links {
-			go fetchcode.FetchJSFromURL(link, ch)
-
-			go parser.ParseJSFromCode(<-ch, link, options.Verbose) // Assuming parseJSFromCode accepts a string of JS code
-
-		}
-
-	case 3: // single url
+	default:
+		//fmt.Println("./jsReveal -u <url to JS file>")
+		return
+	case 1:
+		parser.ParseJS(options.JSFilePath, options.Verbose, options.RegexFilePath, outputChannel)
+	case 2: // -l flag for a file containing multiple JS file paths
+		parser.ParseJSFromList(options.JSLinksPath, options.Verbose, options.RegexFilePath, outputChannel)
+	case 3:
 		if options.Verbose {
 			log.Println("Processing Code from " + cleanPattern.ReplaceAllString(options.JSURL, ""))
 		}
 		ch := make(chan string)
-		fetchcode.FetchJSFromURL(options.JSURL, ch)
+		go fetchcode.FetchJSFromURL(options.JSURL, ch)
+		jsCode := <-ch
+		parser.ParseJSFromCode(jsCode, options.JSURL, options.Verbose, options.RegexFilePath, outputChannel)
+	}
 
-		parser.ParseJSFromCode(<-ch, options.JSURL, options.Verbose)
+	return
+}
+
+func main() {
+	options := runner.ParseOptions()
+	outputChannel := make(chan string)
+	cleanPattern, _ := regexp.Compile(".*/")
+
+	// Checks if arguments were passed
+	if options.Source == 0 {
+		fmt.Println("./jsReveal -u <url to JS file>")
+		return
+	} else {
+		go run(options, outputChannel, cleanPattern)
+
+		// Output Component
+		if options.FileOutput != "" {
+
+			jsonData := make(map[string]interface{})
+			for output := range outputChannel {
+				var parts []string
+				var lineData map[string]interface{}
+
+				if options.Verbose == true {
+
+					parts = strings.Fields(output)
+					lineData = map[string]interface{}{
+						"type":       parts[0],
+						"confidence": parts[2],
+						"source":     parts[3],
+					}
+				} else {
+					parts = strings.Fields(output)
+					lineData = map[string]interface{}{
+						"source": parts[1],
+					}
+				}
+
+				existingData, err := misc.ReadExistingJSON(options.FileOutput)
+				if err != nil {
+					// Add the line data to the overall JSON data map
+					jsonData[fmt.Sprintf("\"%s\"", parts[1])] = lineData
+					misc.WriteJSONToFile(options.FileOutput, jsonData)
+				} else {
+					// Add the line data to the overall JSON data map
+					existingData[fmt.Sprintf("\"%s\"", parts[1])] = lineData
+					misc.WriteJSONToFile(options.FileOutput, existingData)
+				}
+
+			}
+		} else {
+			for output := range outputChannel {
+				fmt.Println(output)
+			}
+		}
 	}
 }

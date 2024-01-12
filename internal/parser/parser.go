@@ -2,17 +2,23 @@ package parser
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
+	"net/http"
+	"net/url"
 	"os"
+	"strings"
+	"sync"
 
 	"github.com/SupremeERG/jsReveal/pkg/fetchcode"
 	"github.com/SupremeERG/jsReveal/pkg/misc"
 	"github.com/SupremeERG/jsReveal/pkg/regexmod"
+	"github.com/SupremeERG/opshins"
 	"github.com/dlclark/regexp2"
 )
 
-// the algorithm that scans the JS code
-func parse(patterns []string, jsCode string, verbosity bool, source string, regexFile string) {
+// parse applies regex patterns to a given string of JavaScript code.
+func parse(patterns []string, jsCode string, verbosity bool, source string, regexFile string, outputChan chan<- string) {
 	var matchTest *regexp2.Match
 	var matches = []string{}
 
@@ -20,130 +26,131 @@ func parse(patterns []string, jsCode string, verbosity bool, source string, rege
 		regexProperties := regexmod.DetermineProperties(pattern, regexFile)
 		regexpPattern, err := regexmod.CompilePattern(pattern, regexProperties)
 		if err != nil {
-			log.Fatal("Error compiling regular expression '", pattern, "': ", err)
+			log.Fatalf(`{"Error compiling regular expression", "Pattern": "%s", "Error": "%v"}`, pattern, err)
 		}
 		matchTest, _ = regexpPattern.FindStringMatch(jsCode)
 
-		for matchTest != nil && misc.Contains(matches, matchTest.String()) == false {
-
+		for matchTest != nil && !misc.Contains(matches, matchTest.String()) {
 			matches = append(matches, matchTest.String())
 			match := matchTest.String()
-			if len(match) > 1000 {
-				match = match[:250] + "\n" // Prevents large blocks of code
-			}
 			if verbosity == true {
-				fmt.Printf("Category: %s\nMatch: %s\nConfidence: %s\nSource: %s\n\n\n", regexProperties.Type, match, regexProperties.Confidence, source)
+				outputChan <- fmt.Sprintf("%s\n%s\n%s\n%s\n\n\n", regexProperties.Type, match, regexProperties.Confidence, source) //fmt.Sprintf(`{"Category": "%s", "Match": "%s", "Confidence": "%s", "Source": "%s"}`, regexProperties.Type, match, regexProperties.Confidence, source)
+
 			} else {
-				fmt.Printf("%s\t(%s)\n\n", match, source)
+				outputChan <- fmt.Sprintf("%s\n%s\n\n", match, source)
 			}
 			matchTest, _ = regexpPattern.FindNextMatch(matchTest)
+
 		}
 	}
 }
 
-// parseJS parses JavaScript code from a file
-func ParseJS(jsFilePath string, verbosity bool) {
-
+// ParseJS parses JavaScript code from a file using specified regex patterns.
+func ParseJS(jsFilePath string, verbosity bool, regexFilePath string, outputChan chan string) {
 	jsCode, err := os.ReadFile(jsFilePath)
 	if err != nil {
-		fmt.Println("Error reading JS file:", err)
-		return
+		log.Fatalf(`{"Error reading JS file": "%v"}`, err)
 	}
 
-	// Grab the regex patterns from the file
-	patterns, regexFile, err := fetchcode.FetchPatterns("regex.txt")
+	patterns, regexFile, err := fetchcode.FetchPatterns(regexFilePath) // Adjust to capture all returned values
 	if err != nil {
-		log.Fatal("Error reading regex patterns: ", err)
+		log.Fatalf(`{"Error reading regex patterns": "%s", "Error": "%v"}`, regexFilePath, err)
 	}
 
-	parse(patterns, string(jsCode), verbosity, jsFilePath, regexFile)
-
-	/*
-		for _, pattern := range patterns {
-			regexProperties := regexmod.DetermineProperties(pattern, "")
-			regexpPattern, err := regexmod.CompilePattern(pattern, regexProperties)
-			if err != nil {
-				log.Fatal("Error compiling regular expression '", pattern, "': ", err)
-			}
-			matchTest, _ = regexpPattern.FindStringMatch(string(jsCode))
-
-			for matchTest != nil && misc.Contains(matches, matchTest.String()) == false {
-				matches = append(matches, matchTest.String())
-				match := matchTest.String()
-				if len(match) > 1000 {
-					match = match[:250] + "\n" // Prevents large blocks of code
-				}
-
-				if verbosity == true {
-					fmt.Printf("Category: %s\nMatch: %s\nConfidence: %s\n", regexProperties.Type, match, regexProperties.Confidence)
-				} else {
-					fmt.Print(match, "\n\n") // removing the pattern from print, it is only needed to test
-				}
-				matchTest, _ = regexpPattern.FindNextMatch(matchTest)
-			}
-		}*/
+	parse(patterns, string(jsCode), verbosity, jsFilePath, regexFile, outputChan)
 }
 
-// ParseJSFromCode parses JavaScript code from a string and applies regex patterns to find matches.
-func ParseJSFromCode(jsCode string, source string, verbosity bool) {
-	// Fetch regex patterns from the file
-	patterns, regexFile, err := fetchcode.FetchPatterns("regex.txt")
+// FetchJSFromURL fetches JavaScript code from a URL
+func FetchJSFromURL(jsURL string) (string, error) {
+	resp, err := http.Get(jsURL)
 	if err != nil {
-		log.Fatalf("Error reading regex patterns from regex.txt: %v", err)
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("HTTP request failed with status code: %d", resp.StatusCode)
 	}
 
-	// Apply regex patterns to the JavaScript code
-	applyRegexPatterns(patterns, jsCode, verbosity, source, regexFile)
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+
+	return string(body), nil
 }
 
-// applyRegexPatterns applies a set of regex patterns to a given string of JavaScript code.
-func applyRegexPatterns(patterns []string, jsCode string, verbosity bool, source string, regexFile string) {
-	for _, pattern := range patterns {
-		regexProperties := regexmod.DetermineProperties(pattern, regexFile)
-		// Assuming DetermineProperties only returns the properties without error
+// section for -l
+const MaxConcurrentJobs = 10 // Adjust the concurrency level as needed
 
-		regexpPattern, err := regexmod.CompilePattern(pattern, regexProperties)
-		if err != nil {
-			log.Fatalf("Error compiling regular expression '%s': %v", pattern, err)
+func ParseJSFromList(listFilePath string, verbosity bool, regexFilePath string, outputChan chan string) {
+	if strings.HasSuffix(listFilePath, ".js") == true {
+		if opshins.PromptYN(fmt.Sprintf("%s looks like a javascript file, not a wordlist of JS URLs. Are you sure you want to use this file?", listFilePath), "yes", " > ") == "no" {
+			close(outputChan)
+			return
 		}
-
-		findAndPrintMatches(regexpPattern, jsCode, regexProperties, verbosity, source)
 	}
+
+	listContent, err := os.ReadFile(listFilePath)
+	if err != nil {
+		log.Fatalf(`{"Error reading list file": "%v"}`, err)
+	}
+
+	jsURLs := strings.Split(string(listContent), "\n")
+
+	// Create a channel for job distribution
+	jobs := make(chan string, len(jsURLs))
+
+	// Start a fixed number of worker goroutines
+	var wg sync.WaitGroup
+	for i := 0; i < MaxConcurrentJobs; i++ {
+		wg.Add(1)
+		go urlWorker(&wg, jobs, verbosity, regexFilePath, outputChan)
+	}
+
+	// Distribute work
+
+	for _, url := range jsURLs {
+		jobs <- url
+	}
+	close(jobs)
+
+	// Wait for all workers to finish
+	wg.Wait()
 }
 
-// findAndPrintMatches finds and prints matches of a compiled regex pattern in a given JavaScript code.
-func findAndPrintMatches(regexpPattern *regexp2.Regexp, jsCode string, regexProperties regexmod.RegexProperties, verbosity bool, source string) {
-	var matches []string
-	matchTest, err := regexpPattern.FindStringMatch(jsCode)
-	if err != nil {
-		log.Printf("Error finding matches for the pattern: %v", err)
-		return
-	}
-
-	for matchTest != nil {
-		match := matchTest.String()
-		if misc.Contains(matches, match) {
+func urlWorker(wg *sync.WaitGroup, jobs <-chan string, verbosity bool, regexFilePath string, outputChan chan string) {
+	defer wg.Done()
+	for jsURL := range jobs {
+		if jsURL == "" {
 			continue
 		}
 
-		matches = append(matches, match)
-
-		// Truncate long matches
-		if len(match) > 1000 {
-			match = match[:250] + "..."
+		jsURL = strings.TrimSpace(jsURL)
+		if _, err := url.ParseRequestURI(jsURL); err != nil {
+			log.Printf(`{"Invalid URL": "%s", "Error": "%v"}`, jsURL, err)
+			continue
 		}
 
-		// Print match based on verbosity
-		if verbosity {
-			fmt.Printf("Category: %s\nMatch: %s\nConfidence: %s\nSource: %s\n\n", regexProperties.Type, match, regexProperties.Confidence, source)
-		} else {
-			fmt.Printf("%s\t(%s)\n", match, source)
-		}
-
-		matchTest, err = regexpPattern.FindNextMatch(matchTest)
+		jsCode, err := FetchJSFromURL(jsURL)
 		if err != nil {
-			log.Printf("Error finding next match: %v", err)
-			break
+			log.Printf(`{"Failed to fetch JS from URL": "%s", "Error": "%v"}`, jsURL, err)
+			continue
 		}
+
+		ParseJSFromCode(jsCode, jsURL, verbosity, regexFilePath, outputChan)
 	}
+}
+
+/// end section for -l
+
+// ParseJSFromCode parses JavaScript code from a string using specified regex patterns.
+func ParseJSFromCode(jsCode string, source string, verbosity bool, regexFilePath string, outputChan chan string) {
+	patterns, regexFile, err := fetchcode.FetchPatterns(regexFilePath) // Adjust to capture all returned values
+	if err != nil {
+		log.Fatalf("Error reading regex patterns from %s: %v", regexFilePath, err)
+	}
+
+	parse(patterns, jsCode, verbosity, source, regexFile, outputChan)
+	//applyRegexPatterns(patterns, jsCode, verbosity, source, regexFile)
 }
