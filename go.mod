@@ -14,10 +14,13 @@ toolchain go1.21.4
 
 //replace github.com/SupremeERG/jsReveal/runner => ./runner
 
+
 require (
 	github.com/SupremeERG/jsReveal/pkg/fetchcode v0.0.0-20240114003256-88945ec39555
 	github.com/SupremeERG/jsReveal/pkg/misc v0.0.0-20240114003256-88945ec39555
-	github.com/SupremeERG/jsReveal/pkg/regexmod v0.0.0-20240114005422-fea127bdfce1
+
+	github.com/SupremeERG/jsReveal/pkg/regexmod v0.0.0-20240114003000-22e6dd072f0c
+
 	github.com/SupremeERG/opshins v1.0.0
 	github.com/dlclark/regexp2 v1.10.0
 )
