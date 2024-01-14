@@ -1,3 +1,3 @@
-module github.com/SupremeERG/internal/parser
+module github.com/SupremeERG/jsReveal/internal/parser
 
 go 1.21.3
