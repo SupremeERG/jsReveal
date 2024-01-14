@@ -1,4 +1,4 @@
-package fetchcode
+package main
 
 import (
 	"bufio"

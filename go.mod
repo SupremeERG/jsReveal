@@ -16,10 +16,3 @@ toolchain go1.21.4
 
 
 
-require (
-	github.com/SupremeERG/colorPrint v1.0.0 // indirect
-	github.com/SupremeERG/jsReveal/pkg/regexmod v0.0.0-00010101000000-000000000000 // indirect
-	github.com/SupremeERG/opshins v1.0.0 // indirect
-	github.com/dlclark/regexp2 v1.10.0 // indirect
-	golang.org/x/exp v0.0.0-20230728194245-b0cb94b80691 // indirect
-)
