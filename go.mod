@@ -12,7 +12,7 @@ toolchain go1.21.4
 
 //replace github.com/SupremeERG/jsReveal/pkg/misc => ./pkg/misc
 
-//replace github.com/SUpremeERG/jsReveal/runner => ./runner
+//replace github.com/SupremeERG/jsReveal/runner => ./runner
 
 
 
