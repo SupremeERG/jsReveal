@@ -1,11 +1,27 @@
 # jsReveal
 
+Reveals interesting JS code to ethical hackers
 
-reveals interesting js code to ethical hackers (endpoints, keywords, credentials, encoded data, vulnerable code) IN THIS ORDER
+# install
 
+```
+go install github.com/SupremeERG/jsReveal@latest
+```
+Or build through source code
+```
+git clone https://github.com/SupremeERG/jsReveal.git && \
+cd jsReveal && \
+go install
+```
 
-Usage: go run main.go -f <input_file.js> 
-
--f - file with js code
--l - file with links to js code
--v - for verbose
+# Usage
+`jsReveal -f <input js file>`
+```
+-f              -- Path to target JS file
+-l              -- Path to a file with JS URLs
+-u              -- URL to a singular JS file
+-v              -- Enable Verbosity
+--endpoint  -- Use predefined regex file for API endpoints and directories
+--api-key       -- Use predefined regex file for API keys
+-o                      -- Send output to file (JSON)
+```
