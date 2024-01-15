@@ -21,7 +21,7 @@ go install
 -l              -- Path to a file with JS URLs
 -u              -- URL to a singular JS file
 -v              -- Enable Verbosity
---endpoint  -- Use predefined regex file for API endpoints and directories
+--endpoint      -- Use predefined regex file for API endpoints and directories
 --api-key       -- Use predefined regex file for API keys
--o                      -- Send output to file (JSON)
+-o              -- Send output to file (JSON)
 ```
