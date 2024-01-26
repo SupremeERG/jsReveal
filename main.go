@@ -92,11 +92,15 @@ func main() {
 			if err != nil {
 				// Add the line data to the overall JSON data map
 				jsonData[fmt.Sprintf("\"%s\"", parts[1])] = lineData
-				misc.WriteJSONToFile(options.FileOutput, jsonData)
+
+				go misc.WriteJSONToFile(options.FileOutput, jsonData)
+				go fmt.Println(output)
+
 			} else {
 				// Add the line data to the overall JSON data map
 				existingData[fmt.Sprintf("\"%s\"", parts[1])] = lineData
-				misc.WriteJSONToFile(options.FileOutput, existingData)
+				go misc.WriteJSONToFile(options.FileOutput, existingData)
+				go fmt.Println(output)
 			}
 
 		}
