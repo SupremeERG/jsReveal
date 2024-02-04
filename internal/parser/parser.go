@@ -34,10 +34,10 @@ func parse(patterns []string, jsCode string, verbosity bool, source string, rege
 			matches = append(matches, matchTest.String())
 			match := matchTest.String()
 			if verbosity == true {
-				outputChan <- fmt.Sprintf("%s\n%s\n%s\n%s\n\n\n", regexProperties.Type, match, regexProperties.Confidence, source)
+				outputChan <- fmt.Sprintf("%s::::%s::::%s::::%s", regexProperties.Type, match, regexProperties.Confidence, source) // previously %s\n%s\n%s\n%s\n\n\n
 
 			} else {
-				outputChan <- fmt.Sprintf("%s\n%s\n\n", match, source)
+				outputChan <- fmt.Sprintf("%s::::%s", match, source) // previously %s\n%s\n\n
 			}
 			matchTest, _ = regexpPattern.FindNextMatch(matchTest)
 

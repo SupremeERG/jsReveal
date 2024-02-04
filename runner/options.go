@@ -16,6 +16,7 @@ Usage
 --endpoint  -- Use predefined regex file for API endpoints and directories
 --api-key  	-- Use predefined regex file for API keys
 -o			-- Send output to file (JSON)
+-p --pretty -- Print output in a prettier format instead of RESULT::::SOURCE
 `
 
 type Options struct {

@@ -75,14 +75,14 @@ func main() {
 
 			if options.Verbose == true {
 
-				parts = strings.Fields(output)
+				parts = strings.Split(output, "::::")
 				lineData = map[string]interface{}{
 					"type":       parts[0],
 					"confidence": parts[2],
 					"source":     parts[3],
 				}
 			} else {
-				parts = strings.Fields(output)
+				parts = strings.Split(output, "::::")
 				lineData = map[string]interface{}{
 					"source": parts[1],
 				}
