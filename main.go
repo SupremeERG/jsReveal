@@ -105,8 +105,15 @@ func main() {
 
 		}
 	} else {
-		for output := range outputChannel {
-			fmt.Println(output)
+		if options.PrettyPrint == true {
+			for output := range outputChannel {
+				newOut := strings.Replace(output, "::::", "\n", -1)
+				fmt.Println(newOut + "\n")
+			}
+		} else {
+			for output := range outputChannel {
+				fmt.Println(output)
+			}
 		}
 	}
 

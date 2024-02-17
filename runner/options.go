@@ -29,6 +29,7 @@ type Options struct {
 	RegexFilePath   string
 	Verbose         bool
 	FileOutput      string
+	PrettyPrint     bool
 }
 
 func ParseOptions() Options {
@@ -45,6 +46,7 @@ func ParseOptions() Options {
 	flag.BoolVar(&options.SearchAPIKey, "api-key", false, "Use predefined regex file for API keys")
 	flag.BoolVar(&options.Verbose, "v", false, "Enable verbose output")
 	flag.StringVar(&options.FileOutput, "o", "", "Send output to file (JSON)")
+	flag.BoolVar(&options.PrettyPrint, "p", true, "Enable Pretty Print")
 
 	flag.Usage = func() {
 		fmt.Print(helpMsg)
