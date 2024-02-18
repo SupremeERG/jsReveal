@@ -17,7 +17,7 @@ func CompilePattern(pattern string, regexProperties RegexProperties) (*regexp2.R
 	var flags regexp2.RegexOptions
 	validPattern := pattern
 	if regexProperties.MatchLine {
-		validPattern = fmt.Sprintf("%s.*(?:\n|$)", validPattern)
+		validPattern = fmt.Sprintf("%s.*(?!$)", validPattern)
 	}
 	if regexProperties.CaseInsensitive {
 		flags |= regexp2.IgnoreCase
@@ -26,7 +26,7 @@ func CompilePattern(pattern string, regexProperties RegexProperties) (*regexp2.R
 	return regexp2.Compile(validPattern, flags)
 }
 
-func DetermineProperties(pattern string, file string) RegexProperties {
+func DetermineProperties(pattern string, file string, matchLine bool) RegexProperties {
 	// file is the file of regular expressions
 	// pattern is the actual regular expression
 	var category string
@@ -36,7 +36,7 @@ func DetermineProperties(pattern string, file string) RegexProperties {
 	case "api_key_regex.txt":
 		category = "Endpoint (API)"
 	}
-	properties := RegexProperties{MatchLine: false, CaseInsensitive: false, Confidence: "high", Type: category}
+	properties := RegexProperties{MatchLine: matchLine, CaseInsensitive: false, Confidence: "high", Type: category}
 
 	// add code for certain detections (endpoints = high confidence, credentials = medium confidence, )
 	return properties

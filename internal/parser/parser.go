@@ -18,12 +18,12 @@ import (
 )
 
 // parse applies regex patterns to a given string of JavaScript code.
-func parse(patterns []string, jsCode string, verbosity bool, source string, regexFile string, outputChan chan<- string) {
+func parse(patterns []string, jsCode string, verbosity bool, matchLine bool, source string, regexFile string, outputChan chan<- string) {
 	var matchTest *regexp2.Match
 	var matches = []string{}
 
 	for _, pattern := range patterns {
-		regexProperties := regexmod.DetermineProperties(pattern, regexFile)
+		regexProperties := regexmod.DetermineProperties(pattern, regexFile, matchLine)
 		regexpPattern, err := regexmod.CompilePattern(pattern, regexProperties)
 		if err != nil {
 			log.Fatalf(`{"Error compiling regular expression", "Pattern": "%s", "Error": "%v"}`, pattern, err)
@@ -47,7 +47,7 @@ func parse(patterns []string, jsCode string, verbosity bool, source string, rege
 }
 
 // ParseJS parses JavaScript code from a file using specified regex patterns.
-func ParseJS(jsFilePath string, verbosity bool, regexFilePath string, outputChan chan string) {
+func ParseJS(jsFilePath string, verbosity bool, matchLine bool, regexFilePath string, outputChan chan string) {
 	jsCode, err := os.ReadFile(jsFilePath)
 	if err != nil {
 		log.Fatalf(`{"Error reading JS file": "%v"}`, err)
@@ -58,7 +58,7 @@ func ParseJS(jsFilePath string, verbosity bool, regexFilePath string, outputChan
 		log.Fatalf(`{"Error reading regex patterns": "%s", "Error": "%v"}`, regexFilePath, err)
 	}
 
-	parse(patterns, string(jsCode), verbosity, jsFilePath, regexFile, outputChan)
+	parse(patterns, string(jsCode), verbosity, matchLine, jsFilePath, regexFile, outputChan)
 }
 
 // FetchJSFromURL fetches JavaScript code from a URL
@@ -84,7 +84,7 @@ func FetchJSFromURL(jsURL string) (string, error) {
 // section for -l
 const MaxConcurrentJobs = 10 // Adjust the concurrency level as needed
 
-func ParseJSFromList(listFilePath string, verbosity bool, regexFilePath string, outputChan chan string) {
+func ParseJSFromList(listFilePath string, verbosity bool, matchLine bool, regexFilePath string, outputChan chan string) {
 	if strings.HasSuffix(listFilePath, ".js") == true {
 		if opshins.PromptYN(fmt.Sprintf("%s looks like a javascript file, not a wordlist of JS URLs. Are you sure you want to use this file?", listFilePath), "yes", " > ") == "no" {
 			close(outputChan)
@@ -106,7 +106,7 @@ func ParseJSFromList(listFilePath string, verbosity bool, regexFilePath string, 
 	var wg sync.WaitGroup
 	for i := 0; i < MaxConcurrentJobs; i++ {
 		wg.Add(1)
-		go urlWorker(&wg, jobs, verbosity, regexFilePath, outputChan)
+		go urlWorker(&wg, jobs, verbosity, matchLine, regexFilePath, outputChan)
 	}
 
 	// Distribute work
@@ -120,7 +120,7 @@ func ParseJSFromList(listFilePath string, verbosity bool, regexFilePath string, 
 	wg.Wait()
 }
 
-func urlWorker(wg *sync.WaitGroup, jobs <-chan string, verbosity bool, regexFilePath string, outputChan chan string) {
+func urlWorker(wg *sync.WaitGroup, jobs <-chan string, verbosity bool, matchLine bool, regexFilePath string, outputChan chan string) {
 	defer wg.Done()
 	for jsURL := range jobs {
 		if jsURL == "" {
@@ -139,19 +139,19 @@ func urlWorker(wg *sync.WaitGroup, jobs <-chan string, verbosity bool, regexFile
 			continue
 		}
 
-		ParseJSFromCode(jsCode, jsURL, verbosity, regexFilePath, outputChan)
+		ParseJSFromCode(jsCode, jsURL, verbosity, matchLine, regexFilePath, outputChan)
 	}
 }
 
 /// end section for -l
 
 // ParseJSFromCode parses JavaScript code from a string using specified regex patterns.
-func ParseJSFromCode(jsCode string, source string, verbosity bool, regexFilePath string, outputChan chan string) {
+func ParseJSFromCode(jsCode string, source string, verbosity bool, matchLine bool, regexFilePath string, outputChan chan string) {
 	patterns, regexFile, err := fetchcode.FetchPatterns(regexFilePath) // Adjust to capture all returned values
 	if err != nil {
 		log.Fatalf("Error reading regex patterns from %s: %v", regexFilePath, err)
 	}
 
-	parse(patterns, jsCode, verbosity, source, regexFile, outputChan)
+	parse(patterns, jsCode, verbosity, matchLine, source, regexFile, outputChan)
 	//applyRegexPatterns(patterns, jsCode, verbosity, source, regexFile)
 }

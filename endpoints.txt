@@ -1,3 +1,7 @@
+\$http\.post\('/.*'
+\$http.get\('/.*'
+\$http\.post\("/.*"
+\$http.get\("/.*"
 new WebSocket\(['"`]wss?:\/\/[\w\d./?=#]+['"`]\)
 '[\w\d]{32,}'
 ['"`]Bearer [\w\d-_.+]+['"`]

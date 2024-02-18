@@ -37,9 +37,9 @@ func run(options runner.Options, outputChannel chan string, cleanPattern *regexp
 		//fmt.Println("./jsReveal -u <url to JS file>")
 		return
 	case 1:
-		parser.ParseJS(options.JSFilePath, options.Verbose, options.RegexFilePath, outputChannel)
+		parser.ParseJS(options.JSFilePath, options.Verbose, options.MatchLine, options.RegexFilePath, outputChannel)
 	case 2: // -l flag for a file containing multiple JS file paths
-		parser.ParseJSFromList(options.JSLinksPath, options.Verbose, options.RegexFilePath, outputChannel)
+		parser.ParseJSFromList(options.JSLinksPath, options.Verbose, options.MatchLine, options.RegexFilePath, outputChannel)
 	case 3:
 		if options.Verbose {
 			log.Println("Processing Code from " + cleanPattern.ReplaceAllString(options.JSURL, ""))
@@ -47,7 +47,7 @@ func run(options runner.Options, outputChannel chan string, cleanPattern *regexp
 		ch := make(chan string)
 		go fetchcode.FetchJSFromURL(options.JSURL, ch)
 		jsCode := <-ch
-		parser.ParseJSFromCode(jsCode, options.JSURL, options.Verbose, options.RegexFilePath, outputChannel)
+		parser.ParseJSFromCode(jsCode, options.JSURL, options.Verbose, options.MatchLine, options.RegexFilePath, outputChannel)
 	}
 
 	return
