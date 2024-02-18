@@ -1,5 +1,4 @@
 https://beta.compass.com/ucfe-assets/homepage/homepage-v1.36.1/bundle.js
-http://ptl-54fe0524-ab8e8383.libcurl.so/assets/application-646b7734d46509648cd8025215dad28534026a06687b07da175936753e5f5f43.js
 https://beta.compass.com/ucfe-assets/homepage/homepage-v1.33.0/bundle.js
 https://beta.compass.com/ucfe-assets/homepage/homepage-v1.33.0/listing-photocard.react.bundle.js
 https://beta.compass.com/ucfe-assets/homepage/homepage-v1.33.0/vendor.bundle.js
