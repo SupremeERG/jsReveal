@@ -16,6 +16,8 @@ Usage
 --endpoint  -- Use predefined regex file for API endpoints and directories
 --api-key  	-- Use predefined regex file for API keys
 -o			-- Send output to file (JSON)
+-p --pretty -- Print output in a prettier format instead of RESULT::::SOURCE
+-m 			-- Matches whole line of a pattern
 `
 
 type Options struct {
@@ -28,6 +30,8 @@ type Options struct {
 	RegexFilePath   string
 	Verbose         bool
 	FileOutput      string
+	PrettyPrint     bool
+	MatchLine       bool
 }
 
 func ParseOptions() Options {
@@ -44,6 +48,8 @@ func ParseOptions() Options {
 	flag.BoolVar(&options.SearchAPIKey, "api-key", false, "Use predefined regex file for API keys")
 	flag.BoolVar(&options.Verbose, "v", false, "Enable verbose output")
 	flag.StringVar(&options.FileOutput, "o", "", "Send output to file (JSON)")
+	flag.BoolVar(&options.PrettyPrint, "p", false, "Enable Pretty Print")
+	flag.BoolVar(&options.MatchLine, "m", false, "Match full line of pattern") // append ".*(\n|$)" to regex then cut the new line character
 
 	flag.Usage = func() {
 		fmt.Print(helpMsg)

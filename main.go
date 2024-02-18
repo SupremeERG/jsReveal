@@ -37,9 +37,9 @@ func run(options runner.Options, outputChannel chan string, cleanPattern *regexp
 		//fmt.Println("./jsReveal -u <url to JS file>")
 		return
 	case 1:
-		parser.ParseJS(options.JSFilePath, options.Verbose, options.RegexFilePath, outputChannel)
+		parser.ParseJS(options.JSFilePath, options.Verbose, options.MatchLine, options.RegexFilePath, outputChannel)
 	case 2: // -l flag for a file containing multiple JS file paths
-		parser.ParseJSFromList(options.JSLinksPath, options.Verbose, options.RegexFilePath, outputChannel)
+		parser.ParseJSFromList(options.JSLinksPath, options.Verbose, options.MatchLine, options.RegexFilePath, outputChannel)
 	case 3:
 		if options.Verbose {
 			log.Println("Processing Code from " + cleanPattern.ReplaceAllString(options.JSURL, ""))
@@ -47,7 +47,7 @@ func run(options runner.Options, outputChannel chan string, cleanPattern *regexp
 		ch := make(chan string)
 		go fetchcode.FetchJSFromURL(options.JSURL, ch)
 		jsCode := <-ch
-		parser.ParseJSFromCode(jsCode, options.JSURL, options.Verbose, options.RegexFilePath, outputChannel)
+		parser.ParseJSFromCode(jsCode, options.JSURL, options.Verbose, options.MatchLine, options.RegexFilePath, outputChannel)
 	}
 
 	return
@@ -75,14 +75,14 @@ func main() {
 
 			if options.Verbose == true {
 
-				parts = strings.Fields(output)
+				parts = strings.Split(output, "::::")
 				lineData = map[string]interface{}{
 					"type":       parts[0],
 					"confidence": parts[2],
 					"source":     parts[3],
 				}
 			} else {
-				parts = strings.Fields(output)
+				parts = strings.Split(output, "::::")
 				lineData = map[string]interface{}{
 					"source": parts[1],
 				}
@@ -92,17 +92,28 @@ func main() {
 			if err != nil {
 				// Add the line data to the overall JSON data map
 				jsonData[fmt.Sprintf("\"%s\"", parts[1])] = lineData
-				misc.WriteJSONToFile(options.FileOutput, jsonData)
+
+				go misc.WriteJSONToFile(options.FileOutput, jsonData)
+				go fmt.Println(output)
+
 			} else {
 				// Add the line data to the overall JSON data map
 				existingData[fmt.Sprintf("\"%s\"", parts[1])] = lineData
-				misc.WriteJSONToFile(options.FileOutput, existingData)
+				go misc.WriteJSONToFile(options.FileOutput, existingData)
+				go fmt.Println(output)
 			}
 
 		}
 	} else {
-		for output := range outputChannel {
-			fmt.Println(output)
+		if options.PrettyPrint == true {
+			for output := range outputChannel {
+				newOut := strings.Replace(output, "::::", "\n", -1)
+				fmt.Println(newOut + "\n")
+			}
+		} else {
+			for output := range outputChannel {
+				fmt.Println(output)
+			}
 		}
 	}
 
