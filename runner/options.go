@@ -10,7 +10,7 @@ import (
 var helpMsg = `
 Usage
 -f  		-- Path to target JS file
--l  		-- Path to a file with JS URLs
+-l  		-- Path to a file with JS URLs (set to "-" for stdin)
 -u  		-- URL to a singular JS file
 -v  		-- Enable Verbosity
 --endpoint  -- Use predefined regex file for API endpoints and directories
@@ -101,6 +101,9 @@ func ParseOptions() Options {
 		options.Source = 1
 	case len(options.JSLinksPath) > 0:
 		options.Source = 2
+		if options.JSLinksPath == "-" {
+			options.Source = 4 // 4 means stdin
+		}
 	case len(options.JSURL) > 0:
 		options.Source = 3
 	}
