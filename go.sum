@@ -1,7 +1,7 @@
 github.com/SupremeERG/colorPrint v1.0.0 h1:L5cEJHTJ+/6WrjhovLJw1zNGT4nBHXlgrjzXDczmvWg=
 github.com/SupremeERG/colorPrint v1.0.0/go.mod h1:DsIWXgxNAQngWJUQTP9U3wuCVzfgMkXtd6Hv33kGag0=
-github.com/SupremeERG/jsReveal/pkg/fetchcode v0.0.0-20240114003256-88945ec39555 h1:mQESxd9+Y2UDmk/UukWPP3/lBHRxN/dQoINq6T8kybY=
-github.com/SupremeERG/jsReveal/pkg/fetchcode v0.0.0-20240114003256-88945ec39555/go.mod h1:PXGKtAmIbrEWasUyjKVPjumHjSj4sSroISq5nWUeFbk=
+github.com/SupremeERG/jsReveal/pkg/fetchcode v0.0.0-20240218044508-3be34d7793a9 h1:pGvYFFRxUwgEDDIcjw9/ncYYmVgJZi1QonSoERdMM1M=
+github.com/SupremeERG/jsReveal/pkg/fetchcode v0.0.0-20240218044508-3be34d7793a9/go.mod h1:PXGKtAmIbrEWasUyjKVPjumHjSj4sSroISq5nWUeFbk=
 github.com/SupremeERG/jsReveal/pkg/misc v0.0.0-20240114003256-88945ec39555 h1:ody+dbvLYUnsrQrGGGvMeZPxSRetn93XK6zMtJ0p4Rc=
 github.com/SupremeERG/jsReveal/pkg/misc v0.0.0-20240114003256-88945ec39555/go.mod h1:587RZVe72ABwE8QHTCk6ZoG9wt9DmgkXscfG4fg6c6o=
 github.com/SupremeERG/jsReveal/pkg/regexmod v0.0.0-20240114003000-22e6dd072f0c h1:7e0CdIDc7X6wCPYWzAksJK3J6rkUxyIiN7oaQBR3jUE=
