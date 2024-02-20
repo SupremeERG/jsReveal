@@ -1,7 +1,3 @@
-\$http\.post\('/.*'
-\$http.get\('/.*'
-\$http\.post\("/.*"
-\$http.get\("/.*"
 new WebSocket\(['"`]wss?:\/\/[\w\d./?=#]+['"`]\)
 '[\w\d]{32,}'
 ['"`]Bearer [\w\d-_.+]+['"`]
@@ -77,3 +73,5 @@ blob.core.windows.net
 onedrive.live.com
 1drv.com
 (storage.googleapis.com|storage.cloud.google.com|storage-download.googleapis.com|content-storage-upload.googleapis.com|content-storage-download.googleapis.com).*(?:\n|$)
+.\.(post|get)\(["']/.*['"]
+\$http\.(get|post)\(["']/.*['"]
