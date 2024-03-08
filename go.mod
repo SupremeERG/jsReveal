@@ -8,7 +8,7 @@ toolchain go1.21.4
 
 //replace github.com/SupremeERG/jsReveal/pkg/fetchcode => ./pkg/fetchcode
 
-replace github.com/SupremeERG/jsReveal/internal/parser => ./internal/parser
+//replace github.com/SupremeERG/jsReveal/internal/parser => ./internal/parser
 
 //replace github.com/SupremeERG/jsReveal/pkg/misc => ./pkg/misc
 

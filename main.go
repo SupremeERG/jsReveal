@@ -93,7 +93,7 @@ func main() {
 		fmt.Println("./jsReveal -u <url to JS file>")
 		return
 	}
-	go run(options, outputChannel, cleanPattern)
+	go run(options, outputChannel, cleanPattern, signalChannel)
 
 
 	go func() {
@@ -153,7 +153,6 @@ func main() {
 			for output := range outputChannel {
 				fmt.Println(output)
 			}
-			fmt.Println("done forever")
 		}
 	}
 
