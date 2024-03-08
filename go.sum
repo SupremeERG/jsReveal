@@ -4,8 +4,8 @@ github.com/SupremeERG/jsReveal/pkg/fetchcode v0.0.0-20240219161308-24d3df75c808 
 github.com/SupremeERG/jsReveal/pkg/fetchcode v0.0.0-20240219161308-24d3df75c808/go.mod h1:PXGKtAmIbrEWasUyjKVPjumHjSj4sSroISq5nWUeFbk=
 github.com/SupremeERG/jsReveal/pkg/misc v0.0.0-20240114003256-88945ec39555 h1:ody+dbvLYUnsrQrGGGvMeZPxSRetn93XK6zMtJ0p4Rc=
 github.com/SupremeERG/jsReveal/pkg/misc v0.0.0-20240114003256-88945ec39555/go.mod h1:587RZVe72ABwE8QHTCk6ZoG9wt9DmgkXscfG4fg6c6o=
-github.com/SupremeERG/jsReveal/pkg/regexmod v0.0.0-20240219161308-24d3df75c808 h1:/dsiVH+pIkrFs2ThXuA6sIanW4JqiYpZXvEZaFOvoNY=
-github.com/SupremeERG/jsReveal/pkg/regexmod v0.0.0-20240219161308-24d3df75c808/go.mod h1:b92SyAcnWQUijP8dwYWNQsOWQxYfp0Y7lA5FZUbw9cE=
+github.com/SupremeERG/jsReveal/pkg/regexmod v0.0.0-20240308180718-e7f183f14e60 h1:aT9u713PIPt4qWtr9k/bdrP6IxVWpA2C75YI+U/Ltqs=
+github.com/SupremeERG/jsReveal/pkg/regexmod v0.0.0-20240308180718-e7f183f14e60/go.mod h1:b92SyAcnWQUijP8dwYWNQsOWQxYfp0Y7lA5FZUbw9cE=
 github.com/SupremeERG/opshins v0.1.0-beta.1 h1:ZEuvHmZgtS+dRDlIXtlkLTqD4VcewShRGIeyJeW2gOA=
 github.com/SupremeERG/opshins v0.1.0-beta.1/go.mod h1:cs7HNvKdiXXbYswJJlvQE52/jYzCJ9SiCxNxlkJYpWQ=
 github.com/dlclark/regexp2 v1.10.0 h1:+/GIL799phkJqYW+3YbOd8LCcbHzT0Pbo8zl70MHsq0=

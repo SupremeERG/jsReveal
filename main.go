@@ -31,15 +31,19 @@ func readJSLinks(filePath string) ([]string, error) {
 	return links, scanner.Err()
 }
 
-func run(options runner.Options, outputChannel chan string, cleanPattern *regexp.Regexp) {
+func run(options runner.Options, outputChannel chan string, cleanPattern *regexp.Regexp, signalChannel chan int) {
 	switch options.Source {
 	default:
 		//fmt.Println("./jsReveal -u <url to JS file>")
 		return
 	case 1:
 		parser.ParseJS(options.JSFilePath, options.Verbose, options.MatchLine, options.RegexFilePath, outputChannel)
+		signalChannel <- 0
+
 	case 2: // -l flag for a file containing multiple JS file paths
 		parser.ParseJSFromList(options.JSLinksPath, options.Verbose, options.MatchLine, options.RegexFilePath, outputChannel)
+		signalChannel <- 0
+
 	case 3:
 		if options.Verbose {
 			log.Println("Processing Code from " + cleanPattern.ReplaceAllString(options.JSURL, ""))
@@ -48,6 +52,8 @@ func run(options runner.Options, outputChannel chan string, cleanPattern *regexp
 		go fetchcode.FetchJSFromURL(options.JSURL, ch)
 		jsCode := <-ch
 		parser.ParseJSFromCode(jsCode, options.JSURL, options.Verbose, options.MatchLine, options.RegexFilePath, outputChannel)
+		signalChannel <- 0
+
 	case 4:
 		stdinScanner := bufio.NewScanner(os.Stdin)
 		for {
@@ -66,6 +72,8 @@ func run(options runner.Options, outputChannel chan string, cleanPattern *regexp
 		if err != nil {
 			log.Fatal(err)
 		}
+		signalChannel <- 0
+
 
 	}
 
@@ -73,9 +81,12 @@ func run(options runner.Options, outputChannel chan string, cleanPattern *regexp
 }
 
 func main() {
+
 	options := runner.ParseOptions()
 	outputChannel := make(chan string)
 	cleanPattern, _ := regexp.Compile(".*/")
+	signalChannel := make(chan int)
+
 
 	// Checks if arguments were passed
 	if options.Source == 0 {
@@ -84,6 +95,14 @@ func main() {
 	}
 	go run(options, outputChannel, cleanPattern)
 
+
+	go func() {
+		for signal := range signalChannel {
+			if signal == 0 {// this means end the parsing and stop the script
+				close(outputChannel)
+			}
+		}
+	}()
 	// Output Component
 	if options.FileOutput != "" {
 
@@ -124,6 +143,7 @@ func main() {
 
 		}
 	} else {
+
 		if options.PrettyPrint == true {
 			for output := range outputChannel {
 				newOut := strings.Replace(output, "::::", "\n", -1)
@@ -133,6 +153,7 @@ func main() {
 			for output := range outputChannel {
 				fmt.Println(output)
 			}
+			fmt.Println("done forever")
 		}
 	}
 

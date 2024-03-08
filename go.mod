@@ -8,7 +8,7 @@ toolchain go1.21.4
 
 //replace github.com/SupremeERG/jsReveal/pkg/fetchcode => ./pkg/fetchcode
 
-//replace github.com/SupremeERG/jsReveal/internal/parser => ./internal/parser
+replace github.com/SupremeERG/jsReveal/internal/parser => ./internal/parser
 
 //replace github.com/SupremeERG/jsReveal/pkg/misc => ./pkg/misc
 
@@ -17,7 +17,7 @@ toolchain go1.21.4
 require (
 	github.com/SupremeERG/jsReveal/pkg/fetchcode v0.0.0-20240219161308-24d3df75c808
 	github.com/SupremeERG/jsReveal/pkg/misc v0.0.0-20240114003256-88945ec39555
-	github.com/SupremeERG/jsReveal/pkg/regexmod v0.0.0-20240219161308-24d3df75c808
+	github.com/SupremeERG/jsReveal/pkg/regexmod v0.0.0-20240308180718-e7f183f14e60
 	github.com/SupremeERG/opshins v0.1.0-beta.1
 	github.com/dlclark/regexp2 v1.10.0
 )
