@@ -2,6 +2,7 @@ package regexmod
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/dlclark/regexp2"
 )
@@ -29,12 +30,15 @@ func CompilePattern(pattern string, regexProperties RegexProperties) (*regexp2.R
 func DetermineProperties(pattern string, file string, matchLine bool) RegexProperties {
 	// file is the file of regular expressions
 	// pattern is the actual regular expression
+	split := strings.Split(file, "/")
+	file = split[len(split)-1]
+
 	var category string
 	switch file {
 	default:
 		category = "Unindentified"
-	case "api_key_regex.txt":
-		category = "Endpoint (API)"
+	case "endpoints.txt":
+		category = "Endpoint (Files, Directories, API Endpoint)"
 	}
 	properties := RegexProperties{MatchLine: matchLine, CaseInsensitive: false, Confidence: "high", Type: category}
 

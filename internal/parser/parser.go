@@ -33,6 +33,9 @@ func parse(patterns []string, jsCode string, verbosity bool, matchLine bool, sou
 		for matchTest != nil && !misc.Contains(matches, matchTest.String()) {
 			matches = append(matches, matchTest.String())
 			match := matchTest.String()
+			if len(match) > 250 {
+				match = match[:50]
+			}
 			if verbosity == true {
 				outputChan <- fmt.Sprintf("%s::::%s::::%s::::%s", regexProperties.Type, match, regexProperties.Confidence, source) // previously %s\n%s\n%s\n%s\n\n\n
 

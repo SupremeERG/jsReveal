@@ -48,6 +48,25 @@ func run(options runner.Options, outputChannel chan string, cleanPattern *regexp
 		go fetchcode.FetchJSFromURL(options.JSURL, ch)
 		jsCode := <-ch
 		parser.ParseJSFromCode(jsCode, options.JSURL, options.Verbose, options.MatchLine, options.RegexFilePath, outputChannel)
+	case 4:
+		stdinScanner := bufio.NewScanner(os.Stdin)
+		for {
+			stdinScanner.Scan()
+			line := stdinScanner.Text()
+			if len(line) == 0 {
+				break
+			}
+			ch := make(chan string)
+			go fetchcode.FetchJSFromURL(line, ch)
+			jsCode := <-ch
+			parser.ParseJSFromCode(jsCode, line, options.Verbose, options.MatchLine, options.RegexFilePath, outputChannel)
+
+		}
+		err := stdinScanner.Err()
+		if err != nil {
+			log.Fatal(err)
+		}
+
 	}
 
 	return
