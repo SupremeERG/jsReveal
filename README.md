@@ -32,8 +32,8 @@ go install github.com/SupremeERG/jsReveal@latest
 ### From source
 
 ```bash
-git clone https://github.com/SupremeERG/jsReveal.git
-cd jsReveal
+git clone https://github.com/SupremeERG/jsReveal.git && \
+cd jsReveal && \
 go install
 ```
 
