@@ -8,12 +8,12 @@
 
 ## Features
 
--   Parse local or remote JavaScript files.
--   Accepts a single file, a list of files, or input from stdin.
--   Uses predefined regex patterns to find API endpoints and API keys.
--   Verbose mode for detailed output.
--   Outputs findings in JSON format for easy integration with other tools.
--   Pretty print option for human-readable console output.
+-   Parses local or remote JavaScript files
+-   Accepts a single file, a list of files, or input from stdin
+-   Finds hidden API endpoints and API keys
+-   Verbose mode for detailed output
+-   Outputs findings in JSON format for easy integration with other tools (if the -o option is used)
+-   Pretty print option for human-readable console output
 
 ## Documentation
 
