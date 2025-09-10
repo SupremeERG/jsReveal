@@ -43,16 +43,16 @@ go install
 
 ### Basic Flags
 
-| Flag         | Description                                                 |
-| :----------- | :---------------------------------------------------------- |
-| `-f`         | Path to a target JS file.                                   |
-| `-l`         | Path to a file with JS URLs.                                |
-| `-u`         | URL to a singular JS file.                                  |
-| `-v`         | Enable verbosity for more detailed output.                  |
-| `--endpoint` | Use a predefined regex file for API endpoints and directories. |
-| `--api-key`  | Use a predefined regex file for API keys.                   |
-| `-o`         | Send output to a file in JSON format.                       |
-| `--pretty`   | Pretty print the output to the console.                     |
+| Flag            | Description                                                 |
+| :-----------    | :---------------------------------------------------------- |
+| `-f`            | Path to a target JS file                                    |
+| `-l`            | Path to a file with JS URLs                                 |
+| `-u`            | URL to a singular JS file                                   |
+| `-v`            | Enable verbosity for more detailed output                   |
+| `--endpoint`    | Use a predefined regex file for API endpoints and directories |
+| `--api-key`     | Use a predefined regex file for API keys                    |
+| `-o`            | Send output to a file in JSON format                        |
+| `-p`,`--pretty` | Pretty print the output to the console                      |
 
 ### Examples
 
