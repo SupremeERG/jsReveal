@@ -4,9 +4,9 @@ First off, thank you for considering contributing to jsReveal! It's people like 
 
 ## Where do I go from here?
 
-If you've noticed a bug or have a feature request, [make one](https://github.com/SupremeERG/jsReveal/issues/new)! It's generally best if you get confirmation of your bug or approval for your feature request this way before starting to code.
+If you've noticed a bug or have a feature request, [make an issue post](https://github.com/SupremeERG/jsReveal/issues/new)! It's generally best if you get confirmation of your bug or approval for your feature request this way before starting to code.
 
-If you have a general question, feel free to reach out to us on [Twitter](https://twitter.com/erg_supreme).
+If you have a general question, feel free to reach out to us on [Twitter](https://twitter.com/egx08).
 
 ## Fork & create a branch
 
