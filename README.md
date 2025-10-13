@@ -6,6 +6,8 @@
 
 `jsReveal` is a tool designed for security researchers and ethical hackers to analyze JavaScript files. It helps in discovering sensitive information such as API endpoints, API keys, and other interesting patterns within JavaScript code. You can provide a single JS file, a list of URLs to JS files, or even pipe URLs via stdin.
 
+**DISCLAIMER⚠️** - This tool is not intended for malicious purposes. Any ethics concerns should be reported through an [issue](https://github.com/SupremeERG/jsReveal/issues/new/choose) 
+
 ## Features
 
 -   Parses local or remote JavaScript files
